@@ -65,9 +65,9 @@ def getWeather():
         url = 'http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&needMoreData=true&pageNo=1&pageSize=7&city='+ area
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
-        if r.status_code == 200:
-            result = r.text
-            res = json.loads(result)
+        result = r.text
+        res = json.loads(result)
+        if r.status_code == 200 && res['code'] != 1014:
             if "多云" in res['data']['list'][0]['weather']:
                 K = K_dict["多云"]
             elif "阴" in res['data']['list'][0]['weather']:
