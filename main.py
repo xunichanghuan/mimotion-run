@@ -67,7 +67,7 @@ def getWeather():
         r = requests.get(url=url, headers=hea)
         result = r.text
         res = json.loads(result)
-        if r.status_code == 200 && res['code'] != 1014:
+        if r.status_code == 200 && "1014" in res['code']:
             if "多云" in res['data']['list'][0]['weather']:
                 K = K_dict["多云"]
             elif "阴" in res['data']['list'][0]['weather']:
