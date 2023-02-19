@@ -1,10 +1,10 @@
 name: 刷步数
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  #push:
+  #  branches: [ master ]
+  #pull_request:
+  #  branches: [ master ]
   schedule:
     - cron: '2 0,2,5,7,9,11,13 * * *'
   watch:
@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
       - name: Checkout codes
