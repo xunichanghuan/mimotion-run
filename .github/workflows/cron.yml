@@ -1,4 +1,4 @@
-name: Random Cron
+name: 随机定时运行
 on:
   workflow_run:
     workflows: ["刷步数"]
