@@ -11,21 +11,21 @@ on:
     types: started
   workflow_dispatch:
 
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout codes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Update system and install zsh
         run: |
           sudo -E apt-get -qq update
           sudo -E apt-get install zsh -y
           
       - name: 初始化Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.8
-
+          python-version: 3.11
       - name: 开始
         run: |
           pip3 install requests
