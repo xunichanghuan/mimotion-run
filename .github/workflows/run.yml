@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.schedule != '2 0,2,5,7,9,11,13 * * *'
+    if: github.event.schedule == '2 0,2,5,7,9,11,13 * * *'
 
     steps:
       - name: Checkout codes
