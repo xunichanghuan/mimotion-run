@@ -11,11 +11,8 @@ on:
     types: started
   workflow_dispatch:
 
-jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '2 0,2,5,7,9,11,13 * * *'
-
     steps:
       - name: Checkout codes
         uses: actions/checkout@v2
@@ -28,7 +25,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-          
+
       - name: 开始
         run: |
           pip3 install requests
