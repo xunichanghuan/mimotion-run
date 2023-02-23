@@ -25,7 +25,8 @@ jobs:
       - name: 初始化Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
       - name: 开始
         run: |
+          pip3 install requests
           python3 main.py
