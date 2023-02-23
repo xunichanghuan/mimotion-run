@@ -35,12 +35,12 @@ jobs:
           POSITION: ${{secrets.POSITION }}
           CORPID: ${{secrets.CORPID }}
           CORPSECRET: ${{secrets.CORPSECRET }}
-          agentid: ${{secrets.AGENTID }}
-          AGENTID: ${{secrets.TOUSER }}
-          toparty: ${{secrets.TOPARTY }}
-          TOPARTY: ${{secrets.TOTAG }}
-          open_get_weather: ${{secrets.OPEN_GET_WEATHER }}
-          OPEN_GET_WEATHER: ${{secrets.AREA }}
+          AGENTID: ${{secrets.AGENTID }}
+          TOUSER: ${{secrets.TOUSER }}
+          TOPARTY: ${{secrets.TOPARTY }}
+          TOTAG: ${{secrets.TOTAG }}
+          OPEN_GET_WEATHER: ${{secrets.OPEN_GET_WEATHER }}
+          AREA: ${{secrets.AREA }}
           QWEATHER: ${{secrets.QWEATHER }}
         run: |
           pip3 install requests
