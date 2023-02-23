@@ -55,7 +55,7 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
     #获取区域天气情况
-    def getWeather():
+    def getWeather(self,key,area):
         if area == "NO":
             print(area == "NO")
             return 1,0
@@ -63,10 +63,10 @@ class MiMotion():
             global K, type
 
             hea = {'User-Agent': 'Mozilla/5.0'}
-            location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area
+            location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+key+'&location='+ area
             location_r = requests.get(url=location_url, headers=hea)
             location_id = json.loads(location_r.text)['location'][0]['id']
-            url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + os.environ["QWEATHER"]
+            url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + key
 
             hea = {'User-Agent': 'Mozilla/5.0'}
             r = requests.get(url=url, headers=hea)
@@ -100,7 +100,7 @@ class MiMotion():
         K = 1.0
         type = ""
         if open_get_weather == "True":
-            self.getWeather()
+            K,type=self.getWeather(os.environ["QWEATHER"],area)
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
