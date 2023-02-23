@@ -209,7 +209,7 @@ def login(user, password):
     url2 = "https://account.huami.com/v2/client/login"
     data2 = {
         "app_name": "com.xiaomi.hm.health",
-        "app_version": "4.6.0",
+        "app_version": "6.5.5",
         "code": f"{code}",
         "country_code": "CN",
         "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
