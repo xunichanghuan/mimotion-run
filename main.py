@@ -95,7 +95,7 @@ class MiMotion():
             return K,type
 
     #获取北京时间确定随机步数&启动主函数
-    def getBeijinTime():
+    def getBeijinTime(min_step0,max_step0):
         global K, type , min_step , max_step
         K = 1.0
         type = ""
@@ -110,32 +110,32 @@ class MiMotion():
             result = find.group(1)
             if  str(time_list[0]) in result:
                 a = set_push[0]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[0]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[0]])
+                min_step = int(min_step0*min_dict[time_list[0]])
+                max_step = int(max_step0*max_dict[time_list[0]])
             elif  str(time_list[1]) in result:
                 a = set_push[1]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[1]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[1]])
+                min_step = int(min_step0*min_dict[time_list[1]])
+                max_step = int(max_step0*max_dict[time_list[1]])
             elif  str(time_list[2]) in result:
                 a = set_push[2]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[2]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[2]])
+                min_step = int(min_step0*min_dict[time_list[2]])
+                max_step = int(max_step0*max_dict[time_list[2]])
             elif  str(time_list[3]) in result:
                 a = set_push[3]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[3]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[3]])
+                min_step = int(min_step0*min_dict[time_list[3]])
+                max_step = int(max_step0*max_dict[time_list[3]])
             elif  str(time_list[4]) in result:
                 a = set_push[4]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[4]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[4]])
+                min_step = int(min_step0*min_dict[time_list[4]])
+                max_step = int(max_step0*max_dict[time_list[4]])
             elif  str(time_list[5]) in result:
                 a = set_push[5]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[5]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[5]])
+                min_step = int(min_step0*min_dict[time_list[5]])
+                max_step = int(max_step0*max_dict[time_list[5]])
             elif  str(time_list[6]) in result:
                 a = set_push[6]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[6]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[6]])
+                min_step = int(min_step0*min_dict[time_list[6]])
+                max_step = int(max_step0*max_dict[time_list[6]])
             else:
                 a = False
                 min_step = 0
@@ -215,7 +215,8 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        min_step,max_step = getBeijinTime()
+
+        min_step,max_step = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)))
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
