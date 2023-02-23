@@ -55,10 +55,10 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
     #获取区域天气情况
-    def getWeather(self):
+    def getWeather():
         if area == "NO":
             print(area == "NO")
-            return
+            return 1,0
         else:
             global K, type
 
@@ -90,15 +90,17 @@ class MiMotion():
                 elif "特大暴雨" in res['now']['text']:
                     K = K_dict["特大暴雨"]
                 type = res['now']['text']
+                return K,type
             else:
                 print("获取天气情况出错")
+                return 1,0
     #获取北京时间确定随机步数&启动主函数
-    def getBeijinTime(self):
+    def getBeijinTime():
         global K, type , min_step , max_step
         K = 1.0
         type = ""
         if open_get_weather == "True":
-            self.getWeather(self)
+            K,type=getWeather()
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
@@ -214,7 +216,7 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        min_step,max_step=self.getBeijinTime(self)
+        min_step,max_step = getBeijinTime()
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
