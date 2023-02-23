@@ -13,11 +13,11 @@
 ### 一、Fork 此仓库
 
 ### 二、设置账号密码
-> 添加名为  **USER**、**PWD**、**SKEY**、**SCKEY**、**POSITION** 、**CORPID**、**CORPSECRET**、**AGENTID**、**TOUSER**、**TOPARTY**、**TOTAG**、**OPEN_GET_WEATHER**、**AREA**的变量: Settings-->Secrets-->New secret  
+> 添加名为  **USER**、**PWD**、**SKEY**、**SCKEY**、**POSITION** 、**CORPID**、**CORPSECRET**、**AGENTID**、**TOUSER**、**TOPARTY**、**TOTAG**、**OPEN_GET_WEATHER**、**AREA**、**QWEATHER**的变量: Settings-->Secrets-->New secret  
 
 | Secrets |  格式  |
 | -------- | ----- |
-| USER |   小米运动登录账号,仅支持小米运动账号对应的手机号,不支持小米账号|
+| USER |   小米运动登录账号,支持小米运动账号对应的手机号,支持小米运动账号邮箱账号，不支持小米账号，（请注意，账号不是 [小米账号]，而是 [小米运动] 的账号,手机号格式[+861380000000]|
 | PWD |   小米运动登录密码,仅支持小米运动账号对应的密码|
 | SKEY |   酷推skey，如无填写**NO**|
 | SCKEY |   server酱sckey，如无填写**NO**|
