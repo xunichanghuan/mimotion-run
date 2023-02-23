@@ -328,7 +328,7 @@ class MiMotion():
         else:
             return
 if __name__ == "__main__":
-    datas = json.loads(os.environ["MIMOTION"].read())
+    datas = json.loads(os.environ["MIMOTION"])
     for i in range(len(datas.get("MIMOTION", []))):
         #print(i)
         _check_item = datas.get("MIMOTION", [])[i]
