@@ -1,11 +1,5 @@
 # -*- coding: utf8 -*-
-import json
-import os
-import random
-import re
-import time
-
-import requests
+import requests, time, datetime, re, sys, os, json, random
 
 # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
 skey = os.environ["SKEY"]
@@ -38,7 +32,7 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 # 设置运行程序时间点,24小时制（不要设置0，1，2可能会发生逻辑错误），这边设置好云函数触发里也要改成相同的小时运行，与time_list列表对应，如默认：30 0 8,10,13,15,17,19,21 * * * *，不会的改8,10,13,15,17,19,21就行替换成你要运行的时间点，其它复制
 # 默认表示为8点10点13点15点17点19点21点运行,如需修改改time_list列表，如改成：time_list = [7, 9, 13, 15, 17, 19, 20]就表示为7点9点13点15点17点19点20点运行，云函数触发里面也要同步修改
 # 说白了不是刷七次嘛,你希望在什么时候刷,设七个时间点，不要该成0，1，2（就是不要设置0点1点2点运行），其它随便改。如果要刷的次数小于7次多余的时间点不用改保持默认就行如只需要4次就改前4个，但函数触发里面要改成4个的，不能用7个的
-time_list = [4, 10, 13, 15, 17, 19, 21]
+time_list = [8, 10, 13, 15, 17, 19, 21]
 
 # 设置运行结果推送不推送与上面时间一一对应，如：set_push列表内的第一个值与time_list列表内的第一个时间点对应，该值单独控制该时间点的推送与否（默认表示为21点（就是设置的最后一个时间点）推送其余时间运行不推送结果）
 # 也是改列表内的False不推送，True推送，每个对应上面列表的一个时间点，如果要刷的次数小于7次同样改前几个其它默认
@@ -54,6 +48,70 @@ class MiMotion():
     def __init__(self, check_item):
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
+
+   #发送酷推
+    def push(title, content):
+        if skey == "NO":
+            print(skey == "NO")
+            return
+        else:
+            url = "https://push.xuthus.cc/send/" + skey
+            data = title + "\n" + content
+            # 发送请求
+            res = requests.post(url=url, data=data.encode('utf-8')).text
+            # 输出发送结果
+            print(res)
+
+
+    # 推送server
+    def push_wx(desp=""):
+        if sckey == 'NO':
+            print(sckey == "NO")
+            return
+        else:
+            server_url = f"https://sc.ftqq.com/{sckey}.send"
+            params = {
+                "text": '【小米运动步数修改】',
+                "desp": desp
+            }
+
+            response = requests.get(server_url, params=params).text
+            print(response)
+
+
+    # 企业微信
+    def get_access_token():
+        urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
+        resp = requests.get(urls).json()
+        access_token = resp['access_token']
+        return access_token
+
+
+    def run(msg):
+        if position == "true":
+            data = {
+                "touser": touser,
+                "toparty": toparty,
+                "totag": totag,
+                "msgtype": "text",
+                "agentid": agentid,
+                "text": {
+                    "content": "【小米运动步数修改】\n" + msg
+                },
+                "safe": 0,
+                "enable_id_trans": 0,
+                "enable_duplicate_check": 0,
+                "duplicate_check_interval": 1800
+            }
+            data = json.dumps(data)
+            req_urls = req_url + get_access_token()
+            resp = requests.post(url=req_urls, data=data).text
+            print(resp)
+            #print(data)
+            return resp
+        else:
+            return
+
     #获取区域天气情况
     def getWeather(self,key,area):
         if area == "NO":
@@ -96,7 +154,7 @@ class MiMotion():
 
     #获取北京时间确定随机步数&启动主函数
     def getBeijinTime(self,min_step0,max_step0,a):
-        global K, type , min_step , max_step
+        global K, type , min_step , max_step,a
         K = 1.0
         type = ""
         if open_get_weather == "True":
@@ -216,7 +274,7 @@ class MiMotion():
         password = str(self.check_item.get("password"))
         #print(password)
 
-        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),False)
+        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),a)
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
@@ -255,68 +313,7 @@ class MiMotion():
         else:
             print("当前不是主人设定的提交步数时间或者主人设置了0步数呢，本次不提交")
             return
-    #发送酷推
-    def push(title, content):
-        if skey == "NO":
-            print(skey == "NO")
-            return
-        else:
-            url = "https://push.xuthus.cc/send/" + skey
-            data = title + "\n" + content
-            # 发送请求
-            res = requests.post(url=url, data=data.encode('utf-8')).text
-            # 输出发送结果
-            print(res)
 
-
-    # 推送server
-    def push_wx(desp=""):
-        if sckey == 'NO':
-            print(sckey == "NO")
-            return
-        else:
-            server_url = f"https://sc.ftqq.com/{sckey}.send"
-            params = {
-                "text": '【小米运动步数修改】',
-                "desp": desp
-            }
-
-            response = requests.get(server_url, params=params).text
-            print(response)
-
-
-    # 企业微信
-    def get_access_token():
-        urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
-        resp = requests.get(urls).json()
-        access_token = resp['access_token']
-        return access_token
-
-
-    def run(msg):
-        if position == "true":
-            data = {
-                "touser": touser,
-                "toparty": toparty,
-                "totag": totag,
-                "msgtype": "text",
-                "agentid": agentid,
-                "text": {
-                    "content": "【小米运动步数修改】\n" + msg
-                },
-                "safe": 0,
-                "enable_id_trans": 0,
-                "enable_duplicate_check": 0,
-                "duplicate_check_interval": 1800
-            }
-            data = json.dumps(data)
-            req_urls = req_url + get_access_token()
-            resp = requests.post(url=req_urls, data=data).text
-            print(resp)
-            #print(data)
-            return resp
-        else:
-            return
 if __name__ == "__main__":
     datas = json.loads(os.environ["MIMOTION"])
     for i in range(len(datas.get("MIMOTION", []))):
