@@ -6,7 +6,7 @@ on:
   #pull_request:
   #  branches: [ master ]
   schedule:
-    - cron: '2 0,2,5,7,9,11,13 * * *'
+    - cron: '8 0,2,5,7,9,11,13 * * *'
   watch:
     types: started
   workflow_dispatch:
@@ -28,18 +28,4 @@ jobs:
           python-version: 3.8
       - name: 开始
         run: |
-          pip3 install requests
-          user='${{ secrets.USER }}'
-          passwd='${{ secrets.PWD }}'
-          skey='${{ secrets.SKEY }}'
-          sckey='${{ secrets.SCKEY }}'
-          position='${{ secrets.POSITION }}'
-          corpid='${{ secrets.CORPID }}'
-          corpsecret='${{ secrets.CORPSECRET }}'
-          agentid='${{ secrets.AGENTID }}'
-          touser='${{ secrets.TOUSER }}'
-          toparty='${{ secrets.TOPARTY }}'
-          totag='${{ secrets.TOTAG }}'
-          open_get_weather='${{ secrets.OPEN_GET_WEATHER }}'
-          area='${{ secrets.AREA }}'
-          python3 main.py ${user} ${passwd} ${skey} ${sckey} ${position} ${corpid} ${corpsecret} ${agentid} ${touser} ${toparty} ${totag} ${open_get_weather} ${area}
+          python3 main.py

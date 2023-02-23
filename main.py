@@ -5,29 +5,29 @@ import requests, time, datetime, re,sys, json, random
 # 用户名（格式为 13800138000）
 
 # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-skey = sys.argv[3]
+skey = '${{ secrets.SKEY }}'
 # 推送server酱
-sckey = sys.argv[4]
+sckey = '${{ secrets.SCKEY }}'
 # 企业微信推送
 # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-position = sys.argv[5]
+position = '${{ secrets.POSITION }}'
 base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
 req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
-corpid = sys.argv[6]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-corpsecret = sys.argv[7]  # 自建应用，每个自建应用里都有单独的secret
-agentid = sys.argv[8]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-touser = sys.argv[9]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-toparty = sys.argv[10]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-totag = sys.argv[11]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+corpid = '${{ secrets.CORPID }}'  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+corpsecret = '${{ secrets.CORPSECRET }}'  # 自建应用，每个自建应用里都有单独的secret
+agentid = '${{ secrets.AGENTID }}'  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+touser = '${{ secrets.TOUSER }}'  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+toparty = '${{ secrets.TOPARTY }}'  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+totag = '${{ secrets.TOTAG }}'  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
 
 # （用于测试推送如果改了能收到推送，推送设置就没问题，看看是不是set_push列表里面没设置推送，仔细看下面我写的很详细）要修改的步数，直接输入想要修改的步数值，（默认）留空为随机步数，改了这个直接运行固定值（用于测试推送）
 # 测试好记得留空不然一直提交固定步数
 step1 = ""
 
 # 开启根据地区天气情况降低步数（默认关闭）
-open_get_weather = sys.argv[12]
+open_get_weather = '${{ secrets.OPEN_GET_WEATHER }}'
 # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-area = sys.argv[13]
+area = '${{ secrets.AREA }}'
 
 # 以下如果看不懂直接默认就行只需改上面
 
@@ -62,27 +62,31 @@ def getWeather():
         return
     else:
         global K, type
-        url = 'http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&needMoreData=true&pageNo=1&pageSize=7&city='+ area
+
+        hea = {'User-Agent': 'Mozilla/5.0'}
+        location_id = json.loads(requests.get(url='https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+'${{ secrets.POSITION }}'+'&location='+ area, headers=hea).text)['location'][0]['id']
+        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + '${{ secrets.POSITION }}'
+
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
         result = r.text
         res = json.loads(result)
-        if r.status_code == 200 and res['code'] != 1014:
-            if "多云" in res['data']['list'][0]['weather']:
+        if r.status_code == 200 and res['code'] != 204 and res['code'] != 400 and res['code'] != 401 and res['code'] != 402 and res['code'] != 403 and res['code'] != 404 and res['code'] != 429 and res['code'] != 500:
+            if "多云" in res['now']['text']:
                 K = K_dict["多云"]
-            elif "阴" in res['data']['list'][0]['weather']:
+            elif "阴" in res['now']['text']:
                 K = K_dict["阴"]
-            elif "小雨" in res['data']['list'][0]['weather']:
+            elif "小雨" in res['now']['text']:
                 K = K_dict["小雨"]
-            elif "中雨" in res['data']['list'][0]['weather']:
+            elif "中雨" in res['now']['text']:
                 K = K_dict["中雨"]
-            elif "大雨" in res['data']['list'][0]['weather']:
+            elif "大雨" in res['now']['text']:
                 K = K_dict["大雨"]
-            elif "暴雨" in res['data']['list'][0]['weather']:
+            elif "暴雨" in res['now']['text']:
                 K = K_dict["暴雨"]
-            elif "大暴雨" in res['data']['list'][0]['weather']:
+            elif "大暴雨" in res['now']['text']:
                 K = K_dict["大暴雨"]
-            elif "特大暴雨" in res['data']['list'][0]['weather']:
+            elif "特大暴雨" in res['now']['text']:
                 K = K_dict["特大暴雨"]
             type = res['data']['list'][0]['weather']
         else:
@@ -147,9 +151,9 @@ def getBeijinTime():
         print("获取北京时间失败")
         return
     if min_1 != 0 and max_1 != 0:
-        user_mi = sys.argv[1]
+        user_mi = '${{ secrets.USER }}'
         # 登录密码
-        passwd_mi = sys.argv[2]
+        passwd_mi = '${{ secrets.PWD }}'
         user_list = user_mi.split('#')
         passwd_list = passwd_mi.split('#')
         if len(user_list) == len(passwd_list):        
