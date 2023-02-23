@@ -216,7 +216,7 @@ class MiMotion():
         password = str(self.check_item.get("password"))
         #print(password)
 
-        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),)
+        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),False)
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
