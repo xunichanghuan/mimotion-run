@@ -95,7 +95,7 @@ class MiMotion():
         global K, type , min_step , max_step
         K = 1.0
         type = ""
-        if open_get_weather == "Flase":
+        if open_get_weather == "False":
             K,type=getWeather()
             return 0,0,0,0
         hea = {'User-Agent': 'Mozilla/5.0'}
