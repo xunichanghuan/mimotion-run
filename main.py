@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
-import requests, time, datetime, re, sys, os, json, random
+import json
+import os
+import random
+import re
+import time
 
 import requests
 
@@ -34,7 +38,7 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 # 设置运行程序时间点,24小时制（不要设置0，1，2可能会发生逻辑错误），这边设置好云函数触发里也要改成相同的小时运行，与time_list列表对应，如默认：30 0 8,10,13,15,17,19,21 * * * *，不会的改8,10,13,15,17,19,21就行替换成你要运行的时间点，其它复制
 # 默认表示为8点10点13点15点17点19点21点运行,如需修改改time_list列表，如改成：time_list = [7, 9, 13, 15, 17, 19, 20]就表示为7点9点13点15点17点19点20点运行，云函数触发里面也要同步修改
 # 说白了不是刷七次嘛,你希望在什么时候刷,设七个时间点，不要该成0，1，2（就是不要设置0点1点2点运行），其它随便改。如果要刷的次数小于7次多余的时间点不用改保持默认就行如只需要4次就改前4个，但函数触发里面要改成4个的，不能用7个的
-time_list = [4, 10, 13, 15, 17, 19, 21]
+time_list = [8, 10, 13, 15, 17, 19, 21]
 
 # 设置运行结果推送不推送与上面时间一一对应，如：set_push列表内的第一个值与time_list列表内的第一个时间点对应，该值单独控制该时间点的推送与否（默认表示为21点（就是设置的最后一个时间点）推送其余时间运行不推送结果）
 # 也是改列表内的False不推送，True推送，每个对应上面列表的一个时间点，如果要刷的次数小于7次同样改前几个其它默认
@@ -51,12 +55,13 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
     #获取区域天气情况
-    def getWeather(self):
+    def getWeather():
         if area == "NO":
             print(area == "NO")
-            return (1,0)
+            return 1,0
         else:
             global K, type
+
             hea = {'User-Agent': 'Mozilla/5.0'}
             location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area
             location_r = requests.get(url=location_url, headers=hea)
@@ -87,15 +92,15 @@ class MiMotion():
                 type = res['now']['text']
             else:
                 print("获取天气情况出错")
-            return (K,type)
+            return K,type
+
     #获取北京时间确定随机步数&启动主函数
-    def getBeijinTime(self):
+    def getBeijinTime():
         global K, type , min_step , max_step
         K = 1.0
         type = ""
-        if open_get_weather == "False":
-            K,type=getWeather(self)
-            return (0,0,0,0)
+        if open_get_weather == "True":
+            K,type=getWeather()
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
@@ -135,16 +140,16 @@ class MiMotion():
                 a = False
                 min_step = 0
                 max_step = 0
-            if step1 != "":
-                min_step = 1
-                max_step = 1
+                if step1 != "":
+                    min_step = 1
+                    max_step = 1
             if step1 != "":
                 a = True
-                min_step = int(K * min_step)
-                max_step = int(K * max_step)
-            return (min_step , max_step)
+            min_step = int(K * min_step)
+            max_step = int(K * max_step)
         else:
             print("获取北京时间失败")
+        return min_step,max_step
 
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
@@ -210,10 +215,10 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        min_step , max_step = getBeijinTime()
+        min_step,max_step = getBeijinTime()
+        step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
-            step = str(random.randint(min_step, max_step))
             login_token, userid = self.login(user, password)
             if login_token == 0:
                 msg = [
