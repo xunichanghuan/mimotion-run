@@ -304,9 +304,9 @@ class MiMotion():
                 ]
             msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
             if a:
-               push('【小米运动步数修改】', msg)
-               push_wx(msg)
-               run(msg)
+               self.push('【小米运动步数修改】', msg)
+               self.push_wx(msg)
+               self.run(msg)
             else:
                print("此次修改结果不推送")
             return msg
