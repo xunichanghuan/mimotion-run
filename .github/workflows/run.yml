@@ -42,6 +42,7 @@ jobs:
           OPEN_GET_WEATHER: ${{secrets.OPEN_GET_WEATHER }}
           AREA: ${{secrets.AREA }}
           QWEATHER: ${{secrets.QWEATHER }}
+          MIMOTION: ${{secrets.MIMOTION }}
         run: |
           pip3 install requests
           python3 main.py
