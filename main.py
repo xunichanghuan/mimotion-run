@@ -50,7 +50,7 @@ class MiMotion():
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
 
    #发送酷推
-    def push(title, content):
+    def push(self, title, content):
         if skey == "NO":
             print(skey == "NO")
             return
@@ -64,7 +64,7 @@ class MiMotion():
 
 
     # 推送server
-    def push_wx(desp=""):
+    def push_wx(self,desp=""):
         if sckey == 'NO':
             print(sckey == "NO")
             return
@@ -80,7 +80,7 @@ class MiMotion():
 
 
     # 企业微信
-    def get_access_token():
+    def get_access_token(self):
         urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
         resp = requests.get(urls).json()
         access_token = resp['access_token']
