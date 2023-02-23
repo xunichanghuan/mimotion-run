@@ -100,7 +100,7 @@ class MiMotion():
         K = 1.0
         type = ""
         if open_get_weather == "True":
-            K,type=getWeather()
+            self.getWeather()
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
