@@ -80,7 +80,7 @@ class MiMotion():
 
 
     # 企业微信
-    def get_access_token(self,self):
+    def get_access_token(self):
         urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
         resp = requests.get(urls).json()
         access_token = resp['access_token']
@@ -104,7 +104,7 @@ class MiMotion():
                 "duplicate_check_interval": 1800
             }
             data = json.dumps(data)
-            req_urls = req_url + get_access_token()
+            req_urls = req_url + self.get_access_token()
             resp = requests.post(url=req_urls, data=data).text
             print(resp)
             #print(data)
