@@ -27,8 +27,7 @@ jobs:
         with:
           python-version: 3.8
       - name: 开始
-        run: |
-          pip3 install requests
+        env:
           USER: ${{secrets.USER }}
           PWD: ${{secrets.PWD }}
           SKEY: ${{secrets.SKEY }}
@@ -43,4 +42,6 @@ jobs:
           open_get_weather: ${{secrets.OPEN_GET_WEATHER }}
           OPEN_GET_WEATHER: ${{secrets.AREA }}
           QWEATHER: ${{secrets.QWEATHER }}
+        run: |
+          pip3 install requests
           python3 main.py
