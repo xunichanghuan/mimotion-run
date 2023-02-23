@@ -90,10 +90,10 @@ class MiMotion():
                 elif "特大暴雨" in res['now']['text']:
                     K = K_dict["特大暴雨"]
                 type = res['now']['text']
-                return K,type
             else:
                 print("获取天气情况出错")
-                return 1,0
+            return K,type
+
     #获取北京时间确定随机步数&启动主函数
     def getBeijinTime():
         global K, type , min_step , max_step
@@ -147,10 +147,9 @@ class MiMotion():
                 a = True
             min_step = int(K * min_step)
             max_step = int(K * max_step)
-            return min_step,max_step
         else:
             print("获取北京时间失败")
-            return 0,0
+        return min_step,max_step
 
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
