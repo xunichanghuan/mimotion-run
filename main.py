@@ -5,15 +5,9 @@ import requests, time, datetime, re,sys, json, random
 base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
 req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
 
-
 # （用于测试推送如果改了能收到推送，推送设置就没问题，看看是不是set_push列表里面没设置推送，仔细看下面我写的很详细）要修改的步数，直接输入想要修改的步数值，（默认）留空为随机步数，改了这个直接运行固定值（用于测试推送）
 # 测试好记得留空不然一直提交固定步数
 step1 = ""
-
-# 开启根据地区天气情况降低步数（默认关闭）
-open_get_weather = os.environ["OPEN_GET_WEATHER"]
-# 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-area = os.environ["AREA"]
 
 # 以下如果看不懂直接默认就行只需改上面
 
@@ -39,7 +33,6 @@ max_dict = {time_list[0]: 9999, time_list[1]: 19999, time_list[2]: 29999, time_l
 time_bj = datetime.datetime.today() + datetime.timedelta(hours=8)
 now = time_bj.strftime("%Y-%m-%d %H:%M:%S")
 headers = {'User-Agent': 'MiFit/5.3.0 (iPhone; iOS 14.7.1; Scale/3.00)'}
-
 
 #获取区域天气情况
 def getWeather():
@@ -343,7 +336,8 @@ def run(msg):
 def main_handler(event, context):
     getBeijinTime()
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
+    
     # 设置开始
     # 用户名（格式为 13800138000）
     user_mi = os.environ["USER"]
