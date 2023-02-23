@@ -6,7 +6,7 @@ on:
   #pull_request:
   #  branches: [ master ]
   schedule:
-    - cron: '3 0,2,5,7,9,11,13 * * *'
+    - cron: '8 0,2,5,7,9,11,13 * * *'
   watch:
     types: started
   workflow_dispatch:
@@ -25,8 +25,22 @@ jobs:
       - name: 初始化Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: 3.8
       - name: 开始
         run: |
           pip3 install requests
+          USER: ${{ secrets.USER }}
+          PWD: ${{ secrets.PWD }}
+          SKEY: ${{ secrets.SKEY }}
+          SCKEY: ${{ secrets.SCKEY }}
+          POSITION: ${{ secrets.POSITION }}
+          CORPID: ${{ secrets.CORPID }}
+          CORPSECRET: ${{ secrets.CORPSECRET }}
+          agentid: ${{ secrets.AGENTID }}
+          AGENTID: ${{ secrets.TOUSER }}
+          toparty: ${{ secrets.TOPARTY }}
+          TOPARTY: ${{ secrets.TOTAG }}
+          open_get_weather: ${{ secrets.OPEN_GET_WEATHER }}
+          OPEN_GET_WEATHER: ${{ secrets.AREA }}
+          QWEATHER: ${{ secrets.QWEATHER }}
           python3 main.py
