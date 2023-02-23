@@ -29,18 +29,18 @@ jobs:
       - name: 开始
         run: |
           pip3 install requests
-          USER: ${{ secrets.USER }}
-          PWD: ${{ secrets.PWD }}
-          SKEY: ${{ secrets.SKEY }}
-          SCKEY: ${{ secrets.SCKEY }}
-          POSITION: ${{ secrets.POSITION }}
-          CORPID: ${{ secrets.CORPID }}
-          CORPSECRET: ${{ secrets.CORPSECRET }}
-          agentid: ${{ secrets.AGENTID }}
-          AGENTID: ${{ secrets.TOUSER }}
-          toparty: ${{ secrets.TOPARTY }}
-          TOPARTY: ${{ secrets.TOTAG }}
-          open_get_weather: ${{ secrets.OPEN_GET_WEATHER }}
-          OPEN_GET_WEATHER: ${{ secrets.AREA }}
-          QWEATHER: ${{ secrets.QWEATHER }}
+          USER: ${{secrets.USER }}
+          PWD: ${{secrets.PWD }}
+          SKEY: ${{secrets.SKEY }}
+          SCKEY: ${{secrets.SCKEY }}
+          POSITION: ${{secrets.POSITION }}
+          CORPID: ${{secrets.CORPID }}
+          CORPSECRET: ${{secrets.CORPSECRET }}
+          agentid: ${{secrets.AGENTID }}
+          AGENTID: ${{secrets.TOUSER }}
+          toparty: ${{secrets.TOPARTY }}
+          TOPARTY: ${{secrets.TOTAG }}
+          open_get_weather: ${{secrets.OPEN_GET_WEATHER }}
+          OPEN_GET_WEATHER: ${{secrets.AREA }}
+          QWEATHER: ${{secrets.QWEATHER }}
           python3 main.py
