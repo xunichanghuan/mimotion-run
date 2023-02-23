@@ -154,7 +154,7 @@ class MiMotion():
 
     #获取北京时间确定随机步数&启动主函数
     def getBeijinTime(self,min_step0,max_step0,a):
-        global K, type , min_step , max_step,a
+        global K, type , min_step , max_step
         K = 1.0
         type = ""
         if open_get_weather == "True":
@@ -274,7 +274,7 @@ class MiMotion():
         password = str(self.check_item.get("password"))
         #print(password)
 
-        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),a)
+        min_step,max_step,a = self.getBeijinTime(int(self.check_item.get("min_step", 10000)),int(self.check_item.get("max_step", 19999)),"False")
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
