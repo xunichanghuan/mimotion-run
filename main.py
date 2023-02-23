@@ -46,7 +46,6 @@ min_dict = {time_list[0]: 0.08, time_list[1]: 0.20, time_list[2]: 0.28, time_lis
 max_dict = {time_list[0]: 0.14, time_list[1]: 0.25, time_list[2]: 0.32, time_list[3]: 0.49, time_list[4]: 0.69, time_list[5]: 0.85, time_list[6]: 1}
 class MiMotion():
     name = "小米运动"
-
     def __init__(self, check_item):
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
@@ -88,7 +87,7 @@ class MiMotion():
                 type = res['now']['text']
             else:
                 print("获取天气情况出错")
-            return K,type
+        return K,type
 
     #获取北京时间确定随机步数&启动主函数
     def getBeijinTime():
@@ -97,6 +96,7 @@ class MiMotion():
         type = ""
         if open_get_weather == "True":
             K,type=getWeather()
+            return 0,0,0,0
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
@@ -141,11 +141,11 @@ class MiMotion():
                     max_step = 1
             if step1 != "":
                 a = True
-            min_step = int(K * min_step)
-            max_step = int(K * max_step)
+                min_step = int(K * min_step)
+                max_step = int(K * max_step)
         else:
             print("获取北京时间失败")
-        return min_step,max_step
+        return K, type , min_step , max_step
 
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
@@ -211,7 +211,7 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        min_step,max_step = getBeijinTime()
+        K, type , min_step , max_step = getBeijinTime()
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
