@@ -55,7 +55,7 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
     #获取区域天气情况
-    def getWeather():
+    def getWeather(self):
         if area == "NO":
             print(area == "NO")
             return
@@ -93,12 +93,12 @@ class MiMotion():
             else:
                 print("获取天气情况出错")
     #获取北京时间确定随机步数&启动主函数
-    def getBeijinTime():
+    def getBeijinTime(self):
         global K, type , min_step , max_step
         K = 1.0
         type = ""
         if open_get_weather == "True":
-            getWeather()    
+            self.getWeather(self)
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
