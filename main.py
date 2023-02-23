@@ -64,8 +64,8 @@ def getWeather():
         global K, type
 
         hea = {'User-Agent': 'Mozilla/5.0'}
-        location_id = json.loads(requests.get(url='https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER")+'&location='+ area, headers=hea).text)['location'][0]['id'], headers=hea))
-        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + os.environ["QWEATHER")
+        location_id = json.loads(requests.get(url='https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area, headers=hea).text)['location'][0]['id'], headers=hea))
+        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + os.environ["QWEATHER"]
 
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
