@@ -145,8 +145,10 @@ class MiMotion():
                 a = True
             min_step = int(K * min_step)
             max_step = int(K * max_step)
+            return min_step,max_step
         else:
             print("获取北京时间失败")
+            return 0,0
 
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
@@ -212,10 +214,10 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        self.getBeijinTime()
+        min_step, max_step=self.getBeijinTime()
         step = str(random.randint(min_step, max_step))
         print(step)
-        if min_1 != 0 and max_1 != 0:
+        if min_step != 0 and max_step != 0:
             login_token, userid = self.login(user, password)
             if login_token == 0:
                 msg = [
