@@ -94,7 +94,7 @@ class MiMotion():
                 print("获取天气情况出错")
     #获取北京时间确定随机步数&启动主函数
     def getBeijinTime():
-        global K, type
+        global K, type , min_step , max_step
         K = 1.0
         type = ""
         if open_get_weather == "True":
