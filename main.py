@@ -51,13 +51,12 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
     #获取区域天气情况
-    def getWeather():
+    def getWeather(self,K,type):
         if area == "NO":
             print(area == "NO")
             return (1,0)
         else:
             global K, type
-
             hea = {'User-Agent': 'Mozilla/5.0'}
             location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area
             location_r = requests.get(url=location_url, headers=hea)
@@ -88,15 +87,14 @@ class MiMotion():
                 type = res['now']['text']
             else:
                 print("获取天气情况出错")
-        return (K,type)
-
+            return (K,type)
     #获取北京时间确定随机步数&启动主函数
-    def getBeijinTime():
+    def getBeijinTime(self):
         global K, type , min_step , max_step
         K = 1.0
         type = ""
         if open_get_weather == "False":
-            K,type=getWeather()
+            K,type=getWeather(self,K,type)
             return (0,0,0,0)
         hea = {'User-Agent': 'Mozilla/5.0'}
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
@@ -105,48 +103,48 @@ class MiMotion():
             pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
             find = re.search(pattern, r.text)
             result = find.group(1)
-            if  str(time_list[0]) in result:
-                a = set_push[0]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[0]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[0]])
-            elif  str(time_list[1]) in result:
-                a = set_push[1]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[1]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[1]])
-            elif  str(time_list[2]) in result:
-                a = set_push[2]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[2]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[2]])
-            elif  str(time_list[3]) in result:
-                a = set_push[3]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[3]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[3]])
-            elif  str(time_list[4]) in result:
-                a = set_push[4]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[4]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[4]])
-            elif  str(time_list[5]) in result:
-                a = set_push[5]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[5]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[5]])
-            elif  str(time_list[6]) in result:
-                a = set_push[6]
-                min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[6]])
-                max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[6]])
-            else:
-                a = False
-                min_step = 0
-                max_step = 0
+                if  str(time_list[0]) in result:
+                    a = set_push[0]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[0]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[0]])
+                elif  str(time_list[1]) in result:
+                    a = set_push[1]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[1]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[1]])
+                elif  str(time_list[2]) in result:
+                    a = set_push[2]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[2]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[2]])
+                elif  str(time_list[3]) in result:
+                    a = set_push[3]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[3]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[3]])
+                elif  str(time_list[4]) in result:
+                    a = set_push[4]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[4]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[4]])
+                elif  str(time_list[5]) in result:
+                    a = set_push[5]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[5]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[5]])
+                elif  str(time_list[6]) in result:
+                    a = set_push[6]
+                    min_step = int(self.check_item.get("min_step", 10000)*min_dict[time_list[6]])
+                    max_step = int(self.check_item.get("max_step", 19999)*max_dict[time_list[6]])
+                else:
+                    a = False
+                    min_step = 0
+                    max_step = 0
                 if step1 != "":
                     min_step = 1
                     max_step = 1
-            if step1 != "":
-                a = True
-                min_step = int(K * min_step)
-                max_step = int(K * max_step)
+                if step1 != "":
+                    a = True
+                    min_step = int(K * min_step)
+                    max_step = int(K * max_step)
+            return (min_step , max_step)
         else:
             print("获取北京时间失败")
-        return (K, type , min_step , max_step)
 
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
@@ -212,10 +210,10 @@ class MiMotion():
         #print(user)
         password = str(self.check_item.get("password"))
         #print(password)
-        K, type , min_step , max_step = getBeijinTime()
-        step = str(random.randint(min_step, max_step))
+        min_step , max_step = getBeijinTime()
         print(step)
         if min_step != 0 and max_step != 0:
+            step = str(random.randint(min_step, max_step))
             login_token, userid = self.login(user, password)
             if login_token == 0:
                 msg = [
