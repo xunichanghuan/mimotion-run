@@ -1,13 +1,33 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random
 
+# 设置开始
+# 用户名（格式为 13800138000）
 
+# 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
+skey = os.environ["SKEY"]
+# 推送server酱
+sckey = os.environ["SCKEY"]
+# 企业微信推送
+# 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
+position = os.environ["POSITION"]
 base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
 req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
+corpid = os.environ["CORPID"]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+corpsecret = os.environ["CORPSECRET"]  # 自建应用，每个自建应用里都有单独的secret
+agentid = os.environ["AGENTID"]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+touser = os.environ["TOUSER"]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+toparty = os.environ["TOPARTY"]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+totag = os.environ["TOTAG"]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
 
 # （用于测试推送如果改了能收到推送，推送设置就没问题，看看是不是set_push列表里面没设置推送，仔细看下面我写的很详细）要修改的步数，直接输入想要修改的步数值，（默认）留空为随机步数，改了这个直接运行固定值（用于测试推送）
 # 测试好记得留空不然一直提交固定步数
 step1 = ""
+
+# 开启根据地区天气情况降低步数（默认关闭）
+open_get_weather = os.environ["OPEN_GET_WEATHER"]
+# 设置获取天气的地区（上面开启后必填）如：area = "宁波"
+area = os.environ["AREA"]
 
 # 以下如果看不懂直接默认就行只需改上面
 
@@ -34,6 +54,7 @@ time_bj = datetime.datetime.today() + datetime.timedelta(hours=8)
 now = time_bj.strftime("%Y-%m-%d %H:%M:%S")
 headers = {'User-Agent': 'MiFit/5.3.0 (iPhone; iOS 14.7.1; Scale/3.00)'}
 
+
 #获取区域天气情况
 def getWeather():
     if area == "NO":
@@ -43,10 +64,10 @@ def getWeather():
         global K, type
 
         hea = {'User-Agent': 'Mozilla/5.0'}
-        location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+ qweather +'&location='+ area
+        location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area
         location_r = requests.get(url=location_url, headers=hea)
         location_id = json.loads(location_r.text)['location'][0]['id']
-        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + qweather
+        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + os.environ["QWEATHER"]
 
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
@@ -132,6 +153,9 @@ def getBeijinTime():
         print("获取北京时间失败")
         return
     if min_1 != 0 and max_1 != 0:
+        user_mi = os.environ["USER"]
+        # 登录密码
+        passwd_mi = os.environ["PWD"]
         user_list = user_mi.split('#')
         passwd_list = passwd_mi.split('#')
         if len(user_list) == len(passwd_list):        
@@ -337,28 +361,4 @@ def main_handler(event, context):
     getBeijinTime()
 
 if __name__ == "__main__":
-    
-    # 设置开始
-    # 用户名（格式为 13800138000）
-    user_mi = os.environ.get('USER')
-    # 登录密码
-    passwd_mi = os.environ.get('PWD')
-    # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-    skey = os.environ.get('SKEY')
-    # 推送server酱
-    sckey = os.environ.get('SCKEY')
-    # 企业微信推送
-    # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-    position = os.environ.get('POSITION')
-    corpid = os.environ.get('CORPID')  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-    corpsecret = os.environ.get('CORPSECRET')  # 自建应用，每个自建应用里都有单独的secret
-    agentid = os.environ.get('AGENTID')  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-    touser = os.environ.get('TOUSER')  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-    toparty = os.environ.get('TOPARTY')  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-    totag = os.environ.get('TOTAG')  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-    # 开启根据地区天气情况降低步数（默认关闭）
-    open_get_weather = os.environ.get('OPEN_GET_WEATHER')
-    # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-    area = os.environ.get('AREA')
-    qweather = os.environ.get('QWEATHER')
     getBeijinTime()
