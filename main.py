@@ -222,7 +222,7 @@ class MiMotion():
         return app_token
 
     @staticmethod
-    def login(user, password):
+    def login(self,user, password):
         url1 = f"https://api-user.huami.com/registrations/"+ user +"/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -261,6 +261,7 @@ class MiMotion():
             "third_name": "huami_phone",
         }
         r2 = requests.post(url=url2, data=data2, headers=headers).json()
+        print(r2)
         if r2.status_code == 200:
             ogin_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
@@ -279,6 +280,7 @@ class MiMotion():
         print(step)
         if min_step != 0 and max_step != 0:
             login_token, userid = self.login(user, password)
+            print(login_token+":"+userid)
             if login_token == 0:
                 msg = [
                     {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
