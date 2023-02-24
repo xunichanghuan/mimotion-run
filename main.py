@@ -235,7 +235,9 @@ class MiMotion():
             "token": "access",
         }
         r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
-        print(r1)
+        self.push('【小米运动步数修改】', r1)
+        self.push_wx(r1)
+        self.run(r1)
         if r1.status_code == 200:
             ogin_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
