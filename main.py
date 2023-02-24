@@ -280,7 +280,8 @@ class MiMotion():
         print(step)
         if min_step != 0 and max_step != 0:
             login_token, userid = self.login(self,user, password)
-            print(login_token+":"+userid)
+            print(login_token)
+            print(userid)
             if login_token == 0:
                 msg = [
                     {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
