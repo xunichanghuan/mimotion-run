@@ -89,12 +89,15 @@ class MiMotion():
         url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         r = requests.get(url=url, headers=hea)
         if r.status_code == 200:
-        result = r.text
-        pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
-        find = re.search(pattern, result)
-        hour = find.group(1)
-        min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
-        max_ratio = math.ceil(int(hour) / 3)
+            result = r.text
+            pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
+            find = re.search(pattern, result)
+            hour = find.group(1)
+            min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
+            max_ratio = math.ceil(int(hour) / 3)
+        else:
+            min_ratio = 0.5
+            max_ratio = 0.9
         try:
             min_step = int(self.check_item.get("min_step", 10000))*min_ratio
         except Exception as e:
