@@ -69,12 +69,12 @@ class MiMotion():
         phone = str(self.check_item.get("phone"))
         password = str(self.check_item.get("password"))
         try:
-            min_step = int(self.check_item.get("min_step", 10000))
+            min_step = int(self.check_item.get("min_step", 100000))
         except Exception as e:
             print("初始化步数失败: 已将最小值设置为 19999", e)
             min_step = 10000
         try:
-            max_step = int(self.check_item.get("max_step", 19999))
+            max_step = int(self.check_item.get("max_step", 199099))
         except Exception as e:
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
