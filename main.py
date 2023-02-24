@@ -30,7 +30,7 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
-        url1 = f"https://api-user.huami.com/registrations/+86{user}/tokens"
+        url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "User-Agent": "MiFit/4.6.0 (iPhone; iOS 14.0.1; Scale/2.00)",
@@ -50,6 +50,7 @@ class MiMotion():
             print(e)
             return 0, 0
         url2 = "https://account.huami.com/v2/client/login"
+        
         data2 = {
             "app_name": "com.xiaomi.hm.health",
             "app_version": "5.0.2",
