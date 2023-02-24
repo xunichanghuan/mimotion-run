@@ -279,7 +279,7 @@ class MiMotion():
         step = str(random.randint(min_step, max_step))
         print(step)
         if min_step != 0 and max_step != 0:
-            login_token, userid = self.login(user, password)
+            login_token, userid = self.login(self,user, password)
             print(login_token+":"+userid)
             if login_token == 0:
                 msg = [
