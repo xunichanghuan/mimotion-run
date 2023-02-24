@@ -223,7 +223,7 @@ class MiMotion():
 
     @staticmethod
     def login(self,user, password):
-        url1 = f"https://api-user.huami.com/registrations/"+ user +"/tokens"
+        url1 = "https://api-user.huami.com/registrations/+86" + user + "/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "User-Agent": "MiFit/4.6.0 (iPhone; iOS 16.3.1; Scale/2.00)"
