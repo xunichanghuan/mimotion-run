@@ -113,5 +113,5 @@ if __name__ == "__main__":
         #print(i)
         _check_item = datas.get("MIMOTION", [])[i]
         #print(_check_item)
-        print(MiMotion().main())
+        print(MiMotion(check_item=_check_item).main())
 
