@@ -66,7 +66,7 @@ class MiMotion():
         return login_token, userid
 
     def main(self):
-        phone = str(self.check_item.get("phone"))
+        user = str(self.check_item.get("user"))
         password = str(self.check_item.get("password"))
         try:
             min_step = int(self.check_item.get("min_step", 10000))
