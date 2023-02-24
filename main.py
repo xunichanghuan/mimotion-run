@@ -7,10 +7,10 @@ import time
 
 import requests
 
+from dailycheckin import CheckIn
 
 
-
-class MiMotion():
+class MiMotion(CheckIn):
     name = "小米运动"
 
     def __init__(self, check_item):
@@ -30,8 +30,8 @@ class MiMotion():
         return app_token
 
     @staticmethod
-    def login(phone, password):
-        url1 = f"https://api-user.huami.com/registrations/+86{phone}/tokens"
+    def login(user, password):
+        url1 = f"https://api-user.huami.com/registrations/+86{user}/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "User-Agent": "MiFit/4.6.0 (iPhone; iOS 14.0.1; Scale/2.00)",
@@ -109,9 +109,7 @@ class MiMotion():
 
 
 if __name__ == "__main__":
-    datas = json.loads(os.environ["MIMOTION"])
-    for i in range(len(datas.get("MIMOTION", []))):
-        #print(i)
-        _check_item = datas.get("MIMOTION", [])[i]
-        #print(_check_item)
-        print(MiMotion(check_item=_check_item).main())
+    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "config.json"), "r", encoding="utf-8") as f:
+        datas = json.loads(f.read())
+    _check_item = datas.get("MIMOTION", [])[0]
+    print(MiMotion(check_item=_check_item).main())
