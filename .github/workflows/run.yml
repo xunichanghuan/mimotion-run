@@ -27,22 +27,19 @@ jobs:
         with:
           python-version: 3.8
       - name: 开始
-        env:
-          USER: ${{secrets.USER }}
-          PWD: ${{secrets.PWD }}
-          SKEY: ${{secrets.SKEY }}
-          SCKEY: ${{secrets.SCKEY }}
-          POSITION: ${{secrets.POSITION }}
-          CORPID: ${{secrets.CORPID }}
-          CORPSECRET: ${{secrets.CORPSECRET }}
-          AGENTID: ${{secrets.AGENTID }}
-          TOUSER: ${{secrets.TOUSER }}
-          TOPARTY: ${{secrets.TOPARTY }}
-          TOTAG: ${{secrets.TOTAG }}
-          OPEN_GET_WEATHER: ${{secrets.OPEN_GET_WEATHER }}
-          AREA: ${{secrets.AREA }}
-          QWEATHER: ${{secrets.QWEATHER }}
-          MIMOTION: ${{secrets.MIMOTION }}
         run: |
           pip3 install requests
-          python3 main.py
+          user='${{ secrets.USER }}'
+          passwd='${{ secrets.PWD }}'
+          skey='${{ secrets.SKEY }}'
+          sckey='${{ secrets.SCKEY }}'
+          position='${{ secrets.POSITION }}'
+          corpid='${{ secrets.CORPID }}'
+          corpsecret='${{ secrets.CORPSECRET }}'
+          agentid='${{ secrets.AGENTID }}'
+          touser='${{ secrets.TOUSER }}'
+          toparty='${{ secrets.TOPARTY }}'
+          totag='${{ secrets.TOTAG }}'
+          open_get_weather='${{ secrets.OPEN_GET_WEATHER }}'
+          area='${{ secrets.AREA }}'
+          python3 main.py ${user} ${passwd} ${skey} ${sckey} ${position} ${corpid} ${corpsecret} ${agentid} ${touser} ${toparty} ${totag} ${open_get_weather} ${area}
