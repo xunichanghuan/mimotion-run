@@ -49,18 +49,34 @@ class MiMotion():
         except Exception as e:
             print(e)
             return 0, 0
-        url2 = "https://account.huami.com/v2/client/login"
-        
-        data2 = {
-            "app_name": "com.xiaomi.hm.health",
-            "app_version": "5.0.2",
-            "code": f"{code}",
-            "country_code": "CN",
-            "device_id": "10E2A98F-D36F-4DF1-A7B9-3FBD8FBEB800",
-            "device_model": "phone",
-            "grant_type": "access_token",
-            "third_name": "huami_phone",
-        }
+        url2 = "https://account.huami.com/v2/client/login"        
+        if user.find('@')==-1:
+            data2 = {
+                "app_name": "com.xiaomi.hm.health",
+                "app_version": "5.0.2",
+                "code": f"{code}",
+                "country_code": "CN",
+                "device_id": "10E2A98F-D36F-4DF1-A7B9-3FBD8FBEB800",
+                "device_model": "phone",
+                "grant_type": "access_token",
+                "third_name": "huami_phone",
+            }
+        else:
+            data2 = {
+                "allow_registration=": "false",
+                "app_name": "com.xiaomi.hm.health",
+                "app_version": "6.5.5",
+                "code": f"{code}",
+                "country_code": "CN",
+                "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
+                "device_model": "phone",
+                "dn": "api-user.huami.com%2Capi-mifit.huami.com%2Capp-analytics.huami.com",
+                "grant_type": "access_token",
+                "lang": "zh_CN",
+                "os_version": "1.5.0",
+                "source": "com.xiaomi.hm.health",
+                "third_name": "email",
+            }
         r2 = requests.post(url=url2, data=data2, headers=headers).json()
         login_token = r2["token_info"]["login_token"]
         userid = r2["token_info"]["user_id"]
