@@ -3,7 +3,26 @@
 [![GitHub forks](https://img.shields.io/github/forks/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/network)
 [![GitHub stars](https://img.shields.io/github/stars/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
-
+#20230224新增
+添加名为  **MIMOTION**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱
+```
+{
+  "MIMOTION": [
+    {
+      "max_step": "20000",
+      "min_step": "10000",
+      "password": "Sitoi",
+      "phone": "18888xxxxxx"
+    },
+    {
+      "max_step": "多账号 最大步数填写，请参考上面",
+      "min_step": "多账号 最小步数填写，请参考上面",
+      "password": "多账号 密码填写，请参考上面",
+      "phone": "多账号 手机号填写，请参考上面"
+    }
+  ]
+}
+```
 # 小米运动自动刷步数
 
 > 小米运动自动刷步数
