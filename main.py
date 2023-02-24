@@ -87,7 +87,7 @@ class MiMotion():
             pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
             find = re.search(pattern, result)
             hour = find.group(1)
-            min_ratio = int(hour) / 24
+            min_ratio = int(hour) / 22
             max_ratio = int(hour) / 21
         else:
             min_ratio = 0.5
