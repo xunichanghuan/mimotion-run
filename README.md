@@ -3,7 +3,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/network)
 [![GitHub stars](https://img.shields.io/github/stars/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
-#20230224新增
+# 20230224新增
 添加名为  **MIMOTION**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱
 ```
 {
