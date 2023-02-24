@@ -1,33 +1,33 @@
 # -*- coding: utf8 -*-
-import requests, time, datetime, re, sys, os, json, random
+import requests, time, datetime, re,sys, json, random
 
 # 设置开始
 # 用户名（格式为 13800138000）
 
 # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-skey = os.environ["SKEY"]
+skey = sys.argv[3]
 # 推送server酱
-sckey = os.environ["SCKEY"]
+sckey = sys.argv[4]
 # 企业微信推送
 # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-position = os.environ["POSITION"]
+position = sys.argv[5]
 base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
 req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
-corpid = os.environ["CORPID"]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-corpsecret = os.environ["CORPSECRET"]  # 自建应用，每个自建应用里都有单独的secret
-agentid = os.environ["AGENTID"]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-touser = os.environ["TOUSER"]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-toparty = os.environ["TOPARTY"]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-totag = os.environ["TOTAG"]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+corpid = sys.argv[6]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+corpsecret = sys.argv[7]  # 自建应用，每个自建应用里都有单独的secret
+agentid = sys.argv[8]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+touser = sys.argv[9]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+toparty = sys.argv[10]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+totag = sys.argv[11]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
 
 # （用于测试推送如果改了能收到推送，推送设置就没问题，看看是不是set_push列表里面没设置推送，仔细看下面我写的很详细）要修改的步数，直接输入想要修改的步数值，（默认）留空为随机步数，改了这个直接运行固定值（用于测试推送）
 # 测试好记得留空不然一直提交固定步数
 step1 = ""
 
 # 开启根据地区天气情况降低步数（默认关闭）
-open_get_weather = os.environ["OPEN_GET_WEATHER"]
+open_get_weather = sys.argv[12]
 # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-area = os.environ["AREA"]
+area = sys.argv[13]
 
 # 以下如果看不懂直接默认就行只需改上面
 
@@ -37,7 +37,7 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 # 设置运行程序时间点,24小时制（不要设置0，1，2可能会发生逻辑错误），这边设置好云函数触发里也要改成相同的小时运行，与time_list列表对应，如默认：30 0 8,10,13,15,17,19,21 * * * *，不会的改8,10,13,15,17,19,21就行替换成你要运行的时间点，其它复制
 # 默认表示为8点10点13点15点17点19点21点运行,如需修改改time_list列表，如改成：time_list = [7, 9, 13, 15, 17, 19, 20]就表示为7点9点13点15点17点19点20点运行，云函数触发里面也要同步修改
 # 说白了不是刷七次嘛,你希望在什么时候刷,设七个时间点，不要该成0，1，2（就是不要设置0点1点2点运行），其它随便改。如果要刷的次数小于7次多余的时间点不用改保持默认就行如只需要4次就改前4个，但函数触发里面要改成4个的，不能用7个的
-time_list = [8, 10, 13, 15, 18, 19, 21]
+time_list = [8, 10, 13, 15, 17, 19, 21]
 
 # 设置运行结果推送不推送与上面时间一一对应，如：set_push列表内的第一个值与time_list列表内的第一个时间点对应，该值单独控制该时间点的推送与否（默认表示为21点（就是设置的最后一个时间点）推送其余时间运行不推送结果）
 # 也是改列表内的False不推送，True推送，每个对应上面列表的一个时间点，如果要刷的次数小于7次同样改前几个其它默认
@@ -62,35 +62,29 @@ def getWeather():
         return
     else:
         global K, type
-
-        hea = {'User-Agent': 'Mozilla/5.0'}
-        location_url = 'https://geoapi.qweather.com/v2/city/lookup?lang=zh&key='+os.environ["QWEATHER"]+'&location='+ area
-        location_r = requests.get(url=location_url, headers=hea)
-        location_id = json.loads(location_r.text)['location'][0]['id']
-        url = 'https://devapi.qweather.com/v7/weather/now?lang=zh&location='+location_id + '&key=' + os.environ["QWEATHER"]
-
+        url = 'http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&needMoreData=true&pageNo=1&pageSize=7&city='+ area
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
         result = r.text
         res = json.loads(result)
-        if r.status_code == 200 and res['code'] != 204 and res['code'] != 400 and res['code'] != 401 and res['code'] != 402 and res['code'] != 403 and res['code'] != 404 and res['code'] != 429 and res['code'] != 500:
-            if "多云" in res['now']['text']:
+        if r.status_code == 200 and res['code'] != 1014:
+            if "多云" in res['data']['list'][0]['weather']:
                 K = K_dict["多云"]
-            elif "阴" in res['now']['text']:
+            elif "阴" in res['data']['list'][0]['weather']:
                 K = K_dict["阴"]
-            elif "小雨" in res['now']['text']:
+            elif "小雨" in res['data']['list'][0]['weather']:
                 K = K_dict["小雨"]
-            elif "中雨" in res['now']['text']:
+            elif "中雨" in res['data']['list'][0]['weather']:
                 K = K_dict["中雨"]
-            elif "大雨" in res['now']['text']:
+            elif "大雨" in res['data']['list'][0]['weather']:
                 K = K_dict["大雨"]
-            elif "暴雨" in res['now']['text']:
+            elif "暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["暴雨"]
-            elif "大暴雨" in res['now']['text']:
+            elif "大暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["大暴雨"]
-            elif "特大暴雨" in res['now']['text']:
+            elif "特大暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["特大暴雨"]
-            type = res['now']['text']
+            type = res['data']['list'][0]['weather']
         else:
             print("获取天气情况出错")
 
@@ -100,10 +94,10 @@ def getBeijinTime():
     global K, type
     K = 1.0
     type = ""
-    if open_get_weather == "True":
-        getWeather()    
     hea = {'User-Agent': 'Mozilla/5.0'}
     url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
+    if open_get_weather == "True":
+        getWeather()
     r = requests.get(url=url, headers=hea)
     if r.status_code == 200:
         pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
@@ -153,9 +147,9 @@ def getBeijinTime():
         print("获取北京时间失败")
         return
     if min_1 != 0 and max_1 != 0:
-        user_mi = os.environ["USER"]
+        user_mi = sys.argv[1]
         # 登录密码
-        passwd_mi = os.environ["PWD"]
+        passwd_mi = sys.argv[2]
         user_list = user_mi.split('#')
         passwd_list = passwd_mi.split('#')
         if len(user_list) == len(passwd_list):        
@@ -186,7 +180,7 @@ def get_code(location):
 
 # 登录
 def login(user, password):
-    url1 = "https://api-user.huami.com/registrations/" + user + "/tokens"
+    url1 = "https://api-user.huami.com/registrations/+86" + user + "/tokens"
     headers = {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2"
@@ -209,7 +203,7 @@ def login(user, password):
     url2 = "https://account.huami.com/v2/client/login"
     data2 = {
         "app_name": "com.xiaomi.hm.health",
-        "app_version": "6.5.5",
+        "app_version": "4.6.0",
         "code": f"{code}",
         "country_code": "CN",
         "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
@@ -271,7 +265,7 @@ def main(_user,_passwd,min_1, max_1):
 
     response = requests.post(url, data=data, headers=head).json()
     # print(response)
-    result = f"时间：[{today}]\n\n\n\n账号：{user[:3]}****{user[7:]}\n\n\n\n步数：{step}\n\n\n\n状态：[" + response['message'] + "]\n\n______________________________\n\n"
+    result = f"[{now}]\n账号：{user[:3]}****{user[7:]}\n修改步数（{step}）[" + response['message'] + "]\n"
     #print(result)
     return result
 
