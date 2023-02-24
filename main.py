@@ -85,13 +85,23 @@ class MiMotion():
     def main(self):
         user = str(self.check_item.get("user"))
         password = str(self.check_item.get("password"))
+        hea = {'User-Agent': 'Mozilla/5.0'}
+        url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
+        r = requests.get(url=url, headers=hea)
+        if r.status_code == 200:
+        result = r.text
+        pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
+        find = re.search(pattern, result)
+        hour = find.group(1)
+        min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
+        max_ratio = math.ceil(int(hour) / 3)
         try:
-            min_step = int(self.check_item.get("min_step", 10000))
+            min_step = int(self.check_item.get("min_step", 10000))*min_ratio
         except Exception as e:
             print("初始化步数失败: 已将最小值设置为 19999", e)
             min_step = 10000
         try:
-            max_step = int(self.check_item.get("max_step", 19999))
+            max_step = int(self.check_item.get("max_step", 19999))*max_ratio
         except Exception as e:
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
