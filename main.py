@@ -7,10 +7,10 @@ import time
 
 import requests
 
-from dailycheckin import CheckIn
 
 
-class MiMotion(CheckIn):
+
+class MiMotion():
     name = "小米运动"
 
     def __init__(self, check_item):
