@@ -99,10 +99,14 @@ def main(self):
 
 
 if __name__ == "__main__":
-    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "config.json"), "r", encoding="utf-8") as f:
-        datas = json.loads(f.read())
-    _check_item = datas.get("MIMOTION", [])[0]
-    print(MiMotion(check_item=_check_item).main())
+    datas = json.loads(os.environ["MIMOTION"])
+    for i in range(len(datas.get("MIMOTION", []))):
+        #print(i)
+        _check_item = datas.get("MIMOTION", [])[i]
+        #print(_check_item)
+        print(MiMotion(check_item=_check_item).main())
+
+
 
 
 
