@@ -36,14 +36,12 @@ class MiMotion():
             response = requests.get(server_url, params=params).text
             print(response)
 
-
     # 企业微信
     def get_access_token():
         urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
         resp = requests.get(urls).json()
         access_token = resp['access_token']
         return access_token
-
 
     def run(msg):
         if position == "true":
@@ -194,7 +192,6 @@ class MiMotion():
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         return msg
 
-
 if __name__ == "__main__":
     datas = json.loads(os.environ["MIMOTION"])
     msg =""
@@ -203,6 +200,6 @@ if __name__ == "__main__":
         _check_item = datas.get("MIMOTION", [])[i]
         #print(_check_item)
         msg += MiMotion(check_item=_check_item).main()
-        push('【小米运动步数修改】', msg)
-        push_wx(msg)
-        run(msg)
+        MiMotion().push('【小米运动步数修改】', msg)
+        MiMotion().push_wx(msg)
+        MiMotion().run(msg)
