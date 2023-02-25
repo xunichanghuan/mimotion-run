@@ -208,8 +208,8 @@ if __name__ == "__main__":
         sckey = "NO"
     # 企业微信推送
     # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-    if datas.get("POSITION") or datas.get("CORPID") or datas.get("CORPSECRET") or datas.get("AGENTID") or datas.get("TOUSER") or datas.get("TOPARTY") or datas.get("TOTAG")
-        position = datas.get("POSITION"):
+    if datas.get("POSITION") or datas.get("CORPID") or datas.get("CORPSECRET") or datas.get("AGENTID") or datas.get("TOUSER") or datas.get("TOPARTY") or datas.get("TOTAG"):
+        position = datas.get("POSITION")
         base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
         req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
         corpid = datas.get("CORPID")  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
