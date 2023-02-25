@@ -295,4 +295,3 @@ if __name__ == "__main__":
         #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
         print(e)
-        return
