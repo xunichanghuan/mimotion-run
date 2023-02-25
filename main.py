@@ -10,6 +10,68 @@ class MiMotion():
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
 
+   #发送酷推
+    def push(title, content):
+        if skey == "NO":
+            print(skey == "NO")
+            return
+        else:
+            url = "https://push.xuthus.cc/send/" + skey
+            data = title + "\n" + content
+            # 发送请求
+            res = requests.post(url=url, data=data.encode('utf-8')).text
+            # 输出发送结果
+            print(res)
+
+    # 推送server
+    def push_wx(desp=""):
+        if sckey == 'NO':
+            print(sckey == "NO")
+            return
+        else:
+            server_url = f"https://sc.ftqq.com/{sckey}.send"
+            params = {
+                "text": '【小米运动步数修改】',
+                "desp": desp
+            }
+
+            response = requests.get(server_url, params=params).text
+            print(response)
+
+
+    # 企业微信
+    def get_access_token():
+        urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
+        resp = requests.get(urls).json()
+        access_token = resp['access_token']
+        return access_token
+
+
+    def run(msg):
+        if position == "true":
+            data = {
+                "touser": touser,
+                "toparty": toparty,
+                "totag": totag,
+                "msgtype": "text",
+                "agentid": agentid,
+                "text": {
+                    "content": "【小米运动步数修改】\n" + msg
+                },
+                "safe": 0,
+                "enable_id_trans": 0,
+                "enable_duplicate_check": 0,
+                "duplicate_check_interval": 1800
+            }
+            data = json.dumps(data)
+            req_urls = req_url + get_access_token()
+            resp = requests.post(url=req_urls, data=data).text
+            print(resp)
+            #print(data)
+            return resp
+        else:
+            return
+
     def get_time(self):
         url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
         response = requests.get(url, headers=self.headers).json()
@@ -141,5 +203,7 @@ if __name__ == "__main__":
         #print(i)
         _check_item = datas.get("MIMOTION", [])[i]
         #print(_check_item)
-        print(MiMotion(check_item=_check_item).main())
-
+        msg += MiMotion(check_item=_check_item).main()
+        push('【小米运动步数修改】', msg)
+        push_wx(msg)
+        run(msg)
