@@ -24,10 +24,6 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
-        if re.search('+86',user) or re.search('@',user):
-            user = user
-        else:
-            user = "+86" + user
         url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -107,6 +103,10 @@ class MiMotion():
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
         step = str(random.randint(min_step, max_step))
+        if re.search('+86',user) or re.search('@',user):
+            user = user
+        else:
+            user = "+86" + user
         login_token, userid = self.login(user, password)
         if login_token == 0:
             msg = [
