@@ -24,7 +24,7 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
-        if search("+86",user) or search("@",user):
+        if re.search("+86",user) or re.search("@",user):
             user = user
         else:
             user = "+86" + user
@@ -48,7 +48,7 @@ class MiMotion():
             print(e)
             return 0, 0
         url2 = "https://account.huami.com/v2/client/login"        
-        if search("+86",user):
+        if re.search("+86",user):
             data2 = {
                 "app_name": "com.xiaomi.hm.health",
                 "app_version": "5.0.2",
@@ -59,7 +59,7 @@ class MiMotion():
                 "grant_type": "access_token",
                 "third_name": "huami_phone",
             }
-        if search("@",user):
+        if re.search("@",user):
             data2 = {
                 "allow_registration=": "false",
                 "app_name": "com.xiaomi.hm.health",
