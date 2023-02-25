@@ -1,6 +1,8 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
 
+
+
 class MiMotion():
     name = "小米运动"
 
@@ -9,7 +11,7 @@ class MiMotion():
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
 
    #发送酷推
-    def push(title, content):
+    def push(self, title, content):
         if skey == "NO":
             print(skey == "NO")
             return
@@ -22,7 +24,7 @@ class MiMotion():
             print(res)
 
     # 推送server
-    def push_wx(desp=""):
+    def push_wx(self,desp=""):
         if sckey == 'NO':
             print(sckey == "NO")
             return
@@ -36,14 +38,16 @@ class MiMotion():
             response = requests.get(server_url, params=params).text
             print(response)
 
+
     # 企业微信
-    def get_access_token():
+    def get_access_token(self):
         urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
         resp = requests.get(urls).json()
         access_token = resp['access_token']
         return access_token
 
-    def run(msg):
+
+    def run(self,msg):
         if position == "true":
             data = {
                 "touser": touser,
@@ -60,7 +64,7 @@ class MiMotion():
                 "duplicate_check_interval": 1800
             }
             data = json.dumps(data)
-            req_urls = req_url + get_access_token()
+            req_urls = req_url + self.get_access_token()
             resp = requests.post(url=req_urls, data=data).text
             print(resp)
             #print(data)
@@ -192,14 +196,15 @@ class MiMotion():
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         return msg
 
+
 if __name__ == "__main__":
     datas = json.loads(os.environ["MIMOTION"])
-    msg =""
+    msg = ""
     for i in range(len(datas.get("MIMOTION", []))):
         #print(i)
         _check_item = datas.get("MIMOTION", [])[i]
         #print(_check_item)
         msg += MiMotion(check_item=_check_item).main()
-        MiMotion().push('【小米运动步数修改】', msg)
-        MiMotion().push_wx(msg)
-        MiMotion().run(msg)
+    MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
+    MiMotion(check_item=_check_item).push_wx(msg)
+    MiMotion(check_item=_check_item).run(msg)
