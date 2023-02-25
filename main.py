@@ -197,18 +197,18 @@ class MiMotion():
 if __name__ == "__main__":
     datas = json.loads(os.environ["CONFIG"])
     # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-    if datas.get("SKEY") != ""
+    if datas.get("SKEY")
         skey = datas.get("SKEY")
     else:
         skey = "NO"
     # 推送server酱
-    if datas.get("SCKEY") != ""
+    if datas.get("SCKEY")
         sckey = datas.get("SCKEY")
     else:
         sckey = "NO"
     # 企业微信推送
     # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-    if datas.get("POSITION") != ""
+    if datas.get("POSITION") or datas.get("CORPID") or datas.get("CORPSECRET") or datas.get("AGENTID") or datas.get("TOUSER") or datas.get("TOPARTY") or datas.get("TOTAG")
         position = datas.get("POSITION")
         base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
         req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
@@ -230,17 +230,17 @@ if __name__ == "__main__":
         totag = "NO"  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
 
     # 开启根据地区天气情况降低步数（默认关闭）
-    if datas.get("OPEN_GET_WEATHER") != ""
+    if datas.get("OPEN_GET_WEATHER")
         open_get_weather = os.environ["OPEN_GET_WEATHER"]
     else:
         open_get_weather = "False"
     # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-    if datas.get("AREA") != ""
+    if datas.get("AREA")
         area = os.environ["AREA"]
     else:
         area = "NO"
     # 和风天气 Private KEY
-    if datas.get("OPEN_GET_WEATHER") != ""
+    if datas.get("OPEN_GET_WEATHER")
         qweather = os.environ["QWEATHER"]
     else:
         qweather = "False"
