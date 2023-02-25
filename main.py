@@ -24,6 +24,8 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
+        if search("+86",user)||search("@",user):
+            user = "+86" + user
         url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -44,7 +46,7 @@ class MiMotion():
             print(e)
             return 0, 0
         url2 = "https://account.huami.com/v2/client/login"        
-        if user.find('+86')!=-1:
+        if search("+86",user):
             data2 = {
                 "app_name": "com.xiaomi.hm.health",
                 "app_version": "5.0.2",
@@ -55,7 +57,7 @@ class MiMotion():
                 "grant_type": "access_token",
                 "third_name": "huami_phone",
             }
-        elif user.find('@')!=-1:
+        if search("@",user):
             data2 = {
                 "allow_registration=": "false",
                 "app_name": "com.xiaomi.hm.health",
@@ -71,9 +73,6 @@ class MiMotion():
                 "source": "com.xiaomi.hm.health",
                 "third_name": "email",
             }
-        else:
-            print("小米运动账号格式不正确，请核实后再试！")
-            return
         r2 = requests.post(url=url2, data=data2, headers=headers).json()
         login_token = r2["token_info"]["login_token"]
         userid = r2["token_info"]["user_id"]
