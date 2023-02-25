@@ -55,7 +55,7 @@ class MiMotion():
                 "grant_type": "access_token",
                 "third_name": "huami_phone",
             }
-        elif user.find('@'!=-1):
+        elif user.find('@')!=-1:
             data2 = {
                 "allow_registration=": "false",
                 "app_name": "com.xiaomi.hm.health",
