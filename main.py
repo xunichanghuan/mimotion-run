@@ -253,5 +253,5 @@ if __name__ == "__main__":
     MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
     MiMotion(check_item=_check_item).push_wx(msg)
     MiMotion(check_item=_check_item).run(msg)
-    MiMotion(check_item=_check_item).run(datas)
+    MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     #MiMotion(check_item=_check_item).run(skey+"@@@"+sckey+"@@@"+position+"@@@"+base_url+"@@@"+req_url+"@@@"+corpid+"@@@"+corpsecret+"@@@"+agentid+"@@@"+touser+"@@@"+toparty+"@@@"+totag+"@@@"+open_get_weather+"@@@"+area+"@@@"+qweather)
