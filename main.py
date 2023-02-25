@@ -44,7 +44,7 @@ class MiMotion():
             print(e)
             return 0, 0
         url2 = "https://account.huami.com/v2/client/login"        
-        if re.search('+86',user):
+        if "+86" in user:
             data2 = {
                 "app_name": "com.xiaomi.hm.health",
                 "app_version": "5.0.2",
@@ -55,7 +55,7 @@ class MiMotion():
                 "grant_type": "access_token",
                 "third_name": "huami_phone",
             }
-        if re.search('@',user):
+        if "@" in user:
             data2 = {
                 "allow_registration=": "false",
                 "app_name": "com.xiaomi.hm.health",
@@ -103,7 +103,7 @@ class MiMotion():
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
         step = str(random.randint(min_step, max_step))
-        if re.search('+86',user) or re.search('@',user):
+        if ("+86" in user) or "@" in user:
             user = user
         else:
             user = "+86" + user
