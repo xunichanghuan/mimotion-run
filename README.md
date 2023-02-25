@@ -4,21 +4,33 @@
 [![GitHub stars](https://img.shields.io/github/stars/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
 # 20230224新增
-添加名为  **MIMOTION**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱,手机号必须+86开头
+添加名为  **CONFIG**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱,手机号
 ```
 {
+  "SKEY": "",
+  "SCKEY": "",
+  "POSITION": "",
+  "CORPID": "",
+  "CORPSECRET": "",
+  "AGENTID": "",
+  "TOUSER": "",
+  "TOPARTY": "",
+  "TOTAG": "",
+  "OPEN_GET_WEATHER": "",
+  "AREA": "",
+  "QWEATHER": "",
   "MIMOTION": [
     {
       "max_step": "20000",
       "min_step": "10000",
       "password": "Sitoi",
-      "phone": "+8618888xxxxxx"
+      "phone": "18888xxxxxx"
     },
     {
       "max_step": "多账号 最大步数填写，请参考上面",
       "min_step": "多账号 最小步数填写，请参考上面",
       "password": "多账号 密码填写，请参考上面",
-      "phone": "多账号 手机号+86开头填写，或者邮箱账号请参考上面"
+      "phone": "多账号 手机号填写，请参考上面"
     }
   ]
 }
@@ -32,8 +44,8 @@
 ### 一、Fork 此仓库
 
 ### 二、设置账号密码
-> 添加名为  **USER**、**PWD**、**SKEY**、**SCKEY**、**POSITION** 、**CORPID**、**CORPSECRET**、**AGENTID**、**TOUSER**、**TOPARTY**、**TOTAG**、**OPEN_GET_WEATHER**、**AREA**、**QWEATHER**的变量: Settings-->Secrets-->New secret  
-
+> ~~添加名为~~ **CONFIG**字段配置说明  **USER**、**PWD**、**SKEY**、**SCKEY**、**POSITION** 、**CORPID**、**CORPSECRET**、**AGENTID**、**TOUSER**、**TOPARTY**、**TOTAG**、**OPEN_GET_WEATHER**、**AREA**、**QWEATHER**~~的变量: Settings-->Secrets-->New secret  ~~
+> 添加名为  **PAT** 的变量: Settings-->Secrets-->New secret
 | Secrets |  格式  |
 | -------- | ----- |
 | USER |   小米运动登录账号,支持小米运动账号对应的手机号,支持小米运动账号邮箱账号，不支持小米账号，（请注意，账号不是 [小米账号]，而是 [小米运动] 的账号,手机号格式[+861380000000]|
