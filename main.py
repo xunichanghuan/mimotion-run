@@ -24,7 +24,7 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
-        if search("+86",user)||search("@",user):
+        if !search("+86",user)&&!search("@",user):
             user = "+86" + user
         url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
         headers = {
