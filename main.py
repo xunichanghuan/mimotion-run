@@ -253,6 +253,6 @@ if __name__ == "__main__":
     MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
     MiMotion(check_item=_check_item).push_wx(msg)
     MiMotion(check_item=_check_item).run(msg)
-    推送CONFIG配置
+    #推送CONFIG配置
     #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
   
