@@ -46,6 +46,7 @@
 ### 二、设置账号密码
 > ~~添加名为~~ **CONFIG**字段配置说明  **USER**、**PWD**、**SKEY**、**SCKEY**、**POSITION** 、**CORPID**、**CORPSECRET**、**AGENTID**、**TOUSER**、**TOPARTY**、**TOTAG**、**OPEN_GET_WEATHER**、**AREA**、**QWEATHER**~~的变量: Settings-->Secrets-->New secret  ~~
 > 添加名为  **PAT** 的变量: Settings-->Secrets-->New secret
+
 | Secrets |  格式  |
 | -------- | ----- |
 | USER |   小米运动登录账号,支持小米运动账号对应的手机号,支持小米运动账号邮箱账号，不支持小米账号，（请注意，账号不是 [小米账号]，而是 [小米运动] 的账号,手机号格式[+861380000000]|
