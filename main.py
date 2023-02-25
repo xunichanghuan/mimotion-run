@@ -24,7 +24,7 @@ class MiMotion():
 
     @staticmethod
     def login(user, password):
-        if search("+86",user)||search("@",user):
+        if search("+86",user) or search("@",user):
             user = user
         else:
             user = "+86" + user
