@@ -1,8 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
 
-
-
 class MiMotion():
     name = "小米运动"
 
@@ -199,6 +197,7 @@ class MiMotion():
 
 if __name__ == "__main__":
     datas = json.loads(os.environ["MIMOTION"])
+    msg =""
     for i in range(len(datas.get("MIMOTION", []))):
         #print(i)
         _check_item = datas.get("MIMOTION", [])[i]
