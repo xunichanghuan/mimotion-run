@@ -91,7 +91,7 @@ class MiMotion():
             response = requests.get(url, headers=self.headers).json()
             t = response["data"]["t"]
             return t
-         except Exception as e:
+        except Exception as e:
             print(e)
             return 0
 
@@ -101,7 +101,7 @@ class MiMotion():
             response = requests.get(url=url, headers=self.headers).json()
             app_token = response["token_info"]["app_token"]
             return app_token
-         except Exception as e:
+        except Exception as e:
             print(e)
             return 0
 
