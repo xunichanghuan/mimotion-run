@@ -13,7 +13,7 @@ class MiMotion():
     def push(self, title, content):
         try:
             if skey == "NO":
-                #print(skey == "NO")
+                print(skey == "NO")
                 return
             else:
                 url = "https://push.xuthus.cc/send/" + skey
@@ -21,7 +21,7 @@ class MiMotion():
                 # 发送请求
                 res = requests.post(url=url, data=data.encode('utf-8')).text
                 # 输出发送结果
-                #print(res)
+                print(res)
         except Exception as e:
             print(e)
             return
@@ -40,7 +40,7 @@ class MiMotion():
                 }
 
                 response = requests.get(server_url, params=params).text
-                #print(response)
+                print(response)
         except Exception as e:
             print(e)
             return
@@ -76,8 +76,7 @@ class MiMotion():
             data = json.dumps(data)
             req_urls = req_url + self.get_access_token()
             resp = requests.post(url=req_urls, data=data).text
-            #print(resp)
-            #print(data)
+            print(resp)
             return resp
         except Exception as e:
                 print(e)
@@ -297,6 +296,7 @@ if __name__ == "__main__":
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
+        print(msg)
         MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
         MiMotion(check_item=_check_item).push_wx(msg)
         MiMotion(check_item=_check_item).run(msg)
