@@ -165,11 +165,11 @@ class MiMotion():
             return 0, 0
 
     def main(self):
-        user = str(self.check_item.get("user"))
-        password = str(self.check_item.get("password"))
-        hea = {'User-Agent': 'Mozilla/5.0'}
-        url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
         try:
+            user = str(self.check_item.get("user"))
+            password = str(self.check_item.get("password"))
+            hea = {'User-Agent': 'Mozilla/5.0'}
+            url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
             r = requests.get(url=url, headers=hea)
             if r.status_code == 200:
                 result = r.text
