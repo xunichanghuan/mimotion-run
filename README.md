@@ -24,13 +24,13 @@
       "max_step": "20000",
       "min_step": "10000",
       "password": "Sitoi",
-      "phone": "18888xxxxxx"
+      "user": "18888xxxxxx"
     },
     {
       "max_step": "多账号 最大步数填写，请参考上面",
       "min_step": "多账号 最小步数填写，请参考上面",
       "password": "多账号 密码填写，请参考上面",
-      "phone": "多账号 手机号填写，请参考上面"
+      "user": "多账号 手机号填写，请参考上面"
     }
   ]
 }
