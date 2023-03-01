@@ -58,7 +58,7 @@ class MiMotion():
 
     def run(self,msg):
         try:
-            if position == "true":
+            if position == "ture":
                 data = {
                     "touser": touser,
                     "toparty": toparty,
@@ -73,16 +73,17 @@ class MiMotion():
                     "enable_duplicate_check": 0,
                     "duplicate_check_interval": 1800
                 }
-            data = json.dumps(data)
-            req_urls = req_url + self.get_access_token()
-            resp = requests.post(url=req_urls, data=data).text
-            print(resp)
-            return resp
+                 data = json.dumps(data)
+                 req_urls = req_url + self.get_access_token()
+                 resp = requests.post(url=req_urls, data=data).text
+                 #print(resp)
+                 return resp
+             else:
+                  return
         except Exception as e:
-                print(e)
-                return
-        else:
-            return
+             print(e)
+             return
+
 
     def get_time(self):
         try:
