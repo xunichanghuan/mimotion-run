@@ -78,8 +78,8 @@ class MiMotion():
                 resp = requests.post(url=req_urls, data=data).text
                 #print(resp)
                 return resp
-             else:
-                  return
+            else:
+                return
         except Exception as e:
              print(e)
              return
