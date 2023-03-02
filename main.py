@@ -76,7 +76,7 @@ class MiMotion():
                 data = json.dumps(data)
                 req_urls = req_url + self.get_access_token()
                 resp = requests.post(url=req_urls, data=data).text
-                #print(resp)
+                print(resp)
                 return resp
             else:
                 return
