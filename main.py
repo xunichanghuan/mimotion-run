@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
-global skey,sckey,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
+global skey,sckey,pushplus,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 
 class MiMotion():
     name = "小米运动"
@@ -84,6 +84,27 @@ class MiMotion():
              print(e)
              return
 
+    # 推送pushplus
+    def push_pushplus(self, title, content=""):
+        try:
+            if pushplus == 'NO':
+                print(pushplus == "NO")
+                return
+            else:
+                server_url = f"http://www.pushplus.plus/send?token={pushplus}&title={title}&content={content}"
+                response = requests.get(server_url).text
+
+                print('pushplus推送:')
+                print(response)
+        except Exception as e:
+            print(e)
+            return
+
+    def pushAll(self, msg):
+        self.push('【小米运动步数修改】', msg)
+        self.push_wx(msg)
+        self.push_pushplus('【小米运动步数修改】', msg)
+        self.run(msg)
 
     def get_time(self):
         try:
@@ -121,6 +142,8 @@ class MiMotion():
             }
 
             r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
+            if r1.status_code != 303:
+                return 0, 0
             location = r1.headers["Location"]
             code_pattern = re.compile("(?<=access=).*?(?=&)")
             code = code_pattern.findall(location)[0]
@@ -275,7 +298,10 @@ if __name__ == "__main__":
             touser = "NO"  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
             toparty = "NO"  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             totag = "NO"  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-
+        # pushplus推送
+        pushplus = datas.get("PUSHPLUS")
+        if pushplus is None:
+            pushplus = "NO"
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
             open_get_weather = datas.get("OPEN_GET_WEATHER")
@@ -298,9 +324,7 @@ if __name__ == "__main__":
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
         print(msg)
-        MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
-        MiMotion(check_item=_check_item).push_wx(msg)
-        MiMotion(check_item=_check_item).run(msg)
+        MiMotion(check_item=_check_item).pushAll(msg)
         #推送CONFIG配置
         #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
