@@ -296,7 +296,7 @@ if __name__ == "__main__":
             #print(i)
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
-            msg += MiMotion(check_item=_check_item).main()
+            #msg += MiMotion(check_item=_check_item).main()
         print(msg)
         MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
         MiMotion(check_item=_check_item).push_wx(msg)
