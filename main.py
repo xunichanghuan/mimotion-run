@@ -147,7 +147,7 @@ class MiMotion():
             location = r1.headers["Location"]
             code_pattern = re.compile("(?<=access=).*?(?=&)")
             code = code_pattern.findall(location)[0]
-            url2 = "https://account.huami.com/v2/client/login"        
+            url2 = "https://account.huami.com/v2/client/login"
             if "+86" in user:
                 data2 = {
                     "app_name": "com.xiaomi.hm.health",
@@ -187,26 +187,20 @@ class MiMotion():
         try:
             user = str(self.check_item.get("user"))
             password = str(self.check_item.get("password"))
-            hea = {'User-Agent': 'Mozilla/5.0'}
-            url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
-            r = requests.get(url=url, headers=hea)
-            if r.status_code == 200:
-                result = r.text
-                pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
-                find = re.search(pattern, result)
-                hour = find.group(1)
-                min_ratio = int(hour) / 22
-                max_ratio = int(hour) / 21
-            else:
-                min_ratio = 0.5
-                max_ratio = 0.9
+            utcnow = datetime.datetime.utcnow()
+            print('utc时间：', utcnow)
+            hour = utcnow.hour + 8
+            minute = utcnow.minute
+            print('北京时间：%d:%d' % (hour, minute))
+            min_ratio = int(hour) / 22
+            max_ratio = int(hour) / 21
         except Exception as e:
             print(e)
             return
         try:
             min_step = math.ceil(int(self.check_item.get("min_step", 10000))*min_ratio)
         except Exception as e:
-            print("初始化步数失败: 已将最小值设置为 19999", e)
+            print("初始化步数失败: 已将最小值设置为 10000", e)
             min_step = 10000
         try:
             max_step = math.ceil(int(self.check_item.get("max_step", 19999))*max_ratio)
