@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
-global skey,sckey,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
+global skey,sckey,pushplus,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 
 class MiMotion():
     name = "小米运动"
@@ -84,6 +84,27 @@ class MiMotion():
              print(e)
              return
 
+    # 推送pushplus
+    def push_pushplus(self, title, content=""):
+        try:
+            if pushplus == 'NO':
+                print(pushplus == "NO")
+                return
+            else:
+                server_url = f"http://www.pushplus.plus/send?token={pushplus}&title={title}&content={content}"
+                response = requests.get(server_url).text
+
+                print('pushplus推送:')
+                print(response)
+        except Exception as e:
+            print(e)
+            return
+
+    def pushAll(self, msg):
+        self.push('【小米运动步数修改】', msg)
+        self.push_wx(msg)
+        self.push_pushplus('【小米运动步数修改】', msg)
+        self.run(msg)
 
     def get_time(self):
         try:
@@ -121,10 +142,12 @@ class MiMotion():
             }
 
             r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
+            if r1.status_code != 303:
+                return 0, 0 , r1.status_code, r1.reason
             location = r1.headers["Location"]
             code_pattern = re.compile("(?<=access=).*?(?=&)")
             code = code_pattern.findall(location)[0]
-            url2 = "https://account.huami.com/v2/client/login"        
+            url2 = "https://account.huami.com/v2/client/login"
             if "+86" in user:
                 data2 = {
                     "app_name": "com.xiaomi.hm.health",
@@ -164,26 +187,20 @@ class MiMotion():
         try:
             user = str(self.check_item.get("user"))
             password = str(self.check_item.get("password"))
-            hea = {'User-Agent': 'Mozilla/5.0'}
-            url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
-            r = requests.get(url=url, headers=hea)
-            if r.status_code == 200:
-                result = r.text
-                pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
-                find = re.search(pattern, result)
-                hour = find.group(1)
-                min_ratio = int(hour) / 22
-                max_ratio = int(hour) / 21
-            else:
-                min_ratio = 0.5
-                max_ratio = 0.9
+            utcnow = datetime.datetime.utcnow()
+            print('utc时间：', utcnow)
+            hour = utcnow.hour + 8
+            minute = utcnow.minute
+            print('北京时间：%d:%d' % (hour, minute))
+            min_ratio = int(hour) % 24 / 22
+            max_ratio = int(hour) % 24 / 21
         except Exception as e:
             print(e)
             return
         try:
             min_step = math.ceil(int(self.check_item.get("min_step", 10000))*min_ratio)
         except Exception as e:
-            print("初始化步数失败: 已将最小值设置为 19999", e)
+            print("初始化步数失败: 已将最小值设置为 10000", e)
             min_step = 10000
         try:
             max_step = math.ceil(int(self.check_item.get("max_step", 19999))*max_ratio)
@@ -196,12 +213,13 @@ class MiMotion():
             user = user
         else:
             user = "+86" + user
-        login_token, userid = self.login(user, password)
+        login_token, userid ,code , reason= self.login(user, password)
         if login_token == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
-                {"name": "修改信息", "value": f"登陆失败\n"},
+                {"name": "修改信息", "value": f"登陆失败:{code}:{reason}\n"},
             ]
+            return msg
         else:
             try:
                 t = self.get_time()
@@ -240,7 +258,7 @@ class MiMotion():
 
 if __name__ == "__main__":
     try:
-        #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
+        # with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "E:\PythonWorkSpace\mimotion-run\config.json"), "r", encoding="utf-8") as f:
         #    datas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
@@ -275,7 +293,10 @@ if __name__ == "__main__":
             touser = "NO"  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
             toparty = "NO"  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             totag = "NO"  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-
+        # pushplus推送
+        pushplus = datas.get("PUSHPLUS")
+        if pushplus is None:
+            pushplus = "NO"
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
             open_get_weather = datas.get("OPEN_GET_WEATHER")
@@ -292,15 +313,17 @@ if __name__ == "__main__":
         else:
             qweather = "False"
         msg = ""
-        for i in range(len(datas.get("MIMOTION", []))):
-            #print(i)
-            _check_item = datas.get("MIMOTION", [])[i]
-            #print(_check_item)
-            msg += MiMotion(check_item=_check_item).main()
+        try:
+            for i in range(len(datas.get("MIMOTION", []))):
+                #print(i)
+                _check_item = datas.get("MIMOTION", [])[i]
+                #print(_check_item)
+                result = MiMotion(check_item=_check_item).main()
+                msg += str(result)
+        except Exception as e:
+            print(e)
         print(msg)
-        MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
-        MiMotion(check_item=_check_item).push_wx(msg)
-        MiMotion(check_item=_check_item).run(msg)
+        MiMotion(check_item=_check_item).pushAll(msg)
         #推送CONFIG配置
         #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
