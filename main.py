@@ -192,8 +192,8 @@ class MiMotion():
             hour = utcnow.hour + 8
             minute = utcnow.minute
             print('北京时间：%d:%d' % (hour, minute))
-            min_ratio = int(hour) / 22
-            max_ratio = int(hour) / 21
+            min_ratio = int(hour) % 24 / 22
+            max_ratio = int(hour) % 24 / 21
         except Exception as e:
             print(e)
             return
