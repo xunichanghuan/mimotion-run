@@ -143,7 +143,7 @@ class MiMotion():
 
             r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
             if r1.status_code != 303:
-                return 0, 0
+                return 0, 0 , r1.status_code, r1.reason
             location = r1.headers["Location"]
             code_pattern = re.compile("(?<=access=).*?(?=&)")
             code = code_pattern.findall(location)[0]
@@ -213,12 +213,13 @@ class MiMotion():
             user = user
         else:
             user = "+86" + user
-        login_token, userid = self.login(user, password)
+        login_token, userid ,code , reason= self.login(user, password)
         if login_token == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
-                {"name": "修改信息", "value": f"登陆失败\n"},
+                {"name": "修改信息", "value": f"登陆失败:{code}:{reason}\n"},
             ]
+            return msg
         else:
             try:
                 t = self.get_time()
@@ -257,7 +258,7 @@ class MiMotion():
 
 if __name__ == "__main__":
     try:
-        #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
+        # with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "E:\PythonWorkSpace\mimotion-run\config.json"), "r", encoding="utf-8") as f:
         #    datas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
@@ -312,11 +313,15 @@ if __name__ == "__main__":
         else:
             qweather = "False"
         msg = ""
-        for i in range(len(datas.get("MIMOTION", []))):
-            #print(i)
-            _check_item = datas.get("MIMOTION", [])[i]
-            #print(_check_item)
-            msg += MiMotion(check_item=_check_item).main()
+        try:
+            for i in range(len(datas.get("MIMOTION", []))):
+                #print(i)
+                _check_item = datas.get("MIMOTION", [])[i]
+                #print(_check_item)
+                result = MiMotion(check_item=_check_item).main()
+                msg += str(result)
+        except Exception as e:
+            print(e)
         print(msg)
         MiMotion(check_item=_check_item).pushAll(msg)
         #推送CONFIG配置
