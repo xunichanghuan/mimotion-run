@@ -163,19 +163,21 @@ class MiMotion():
                 hour = find.group(1)
                 min_ratio = int(hour) / 22
                 max_ratio = int(hour) / 21
+                step_ratio = random.randint(min_ratio, max_ratio)
             else:
                 min_ratio = 0.5
                 max_ratio = 0.9
+                step_ratio = random.randint(min_ratio, max_ratio)
         except Exception as e:
             print(e)
             return
         try:
-            min_step = math.ceil(int(self.check_item.get("min_step", 10000))*min_ratio)
+            min_step = math.ceil(int(self.check_item.get("min_step", 10000))*step_ratio)
         except Exception as e:
             print("初始化步数失败: 已将最小值设置为 19999", e)
             min_step = 10000
         try:
-            max_step = math.ceil(int(self.check_item.get("max_step", 19999))*max_ratio)
+            max_step = math.ceil(int(self.check_item.get("max_step", 19999))*step_ratio)
         except Exception as e:
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
