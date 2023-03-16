@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
-global skey,sckey,position,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
+global skey,sckey,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 
 class MiMotion():
     name = "小米运动"
@@ -265,8 +265,7 @@ if __name__ == "__main__":
 
         # 企业微信推送
         # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-        if datas.get("POSITION") and datas.get("CORPID") and datas.get("CORPSECRET") and datas.get("AGENTID") and datas.get("TOUSER") and datas.get("TOPARTY") and datas.get("TOTAG"):
-            position = datas.get("POSITION")
+        if datas.get("POSITION"):
             base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
             req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
             corpid = datas.get("CORPID")  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
