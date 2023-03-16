@@ -46,6 +46,7 @@
 }
 ```
 > 添加名为  **PAT** 的变量: Settings-->Secrets-->New secret
+
 | Secrets |  格式  |
 | -------- | ----- |
 | PAT |   此处**PAT**需要申请，值为github token，教程详见：https://www.jianshu.com/p/bb82b3ad1d11 ,需要repo和workflow权限,此项必填，避免git push的权限错误。 |
