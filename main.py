@@ -12,16 +12,12 @@ class MiMotion():
    #发送酷推
     def push(self, title, content):
         try:
-            if skey == "NO":
-                print(skey == "NO")
-                return
-            else:
-                url = "https://push.xuthus.cc/send/" + skey
-                data = title + "\n" + content
-                # 发送请求
-                res = requests.post(url=url, data=data.encode('utf-8')).text
-                # 输出发送结果
-                print(res)
+            url = "https://push.xuthus.cc/send/" + skey
+            data = title + "\n" + content
+            # 发送请求
+            res = requests.post(url=url, data=data.encode('utf-8')).text
+            # 输出发送结果
+            print(res)
         except Exception as e:
             print(e)
             return
@@ -29,18 +25,14 @@ class MiMotion():
     # 推送server
     def push_wx(self,desp=""):
         try:
-            if sckey == 'NO':
-                print(sckey == "NO")
-                return
-            else:
-                server_url = f"https://sc.ftqq.com/{sckey}.send"
-                params = {
-                    "text": '【小米运动步数修改】',
-                    "desp": desp
-                }
+            server_url = f"https://sc.ftqq.com/{sckey}.send"
+            params = {
+                "text": '【小米运动步数修改】',
+                "desp": desp
+            }
 
-                response = requests.get(server_url, params=params).text
-                print(response)
+            response = requests.get(server_url, params=params).text
+            print(response)
         except Exception as e:
             print(e)
             return
@@ -58,31 +50,28 @@ class MiMotion():
 
     def run(self,msg):
         try:
-            if position == "ture":
-                data = {
-                    "touser": touser,
-                    "toparty": toparty,
-                    "totag": totag,
-                    "msgtype": "text",
-                    "agentid": agentid,
-                    "text": {
-                        "content": "【小米运动步数修改】\n" + msg
-                    },
-                    "safe": 0,
-                    "enable_id_trans": 0,
-                    "enable_duplicate_check": 0,
-                    "duplicate_check_interval": 1800
-                }
-                data = json.dumps(data)
-                req_urls = req_url + self.get_access_token()
-                resp = requests.post(url=req_urls, data=data).text
-                print(resp)
-                return resp
-            else:
-                return
+            data = {
+                "touser": touser,
+                "toparty": toparty,
+                "totag": totag,
+                "msgtype": "text",
+                "agentid": agentid,
+                "text": {
+                    "content": "【小米运动步数修改】\n" + msg
+                },
+                "safe": 0,
+                "enable_id_trans": 0,
+                "enable_duplicate_check": 0,
+                "duplicate_check_interval": 1800
+            }
+            data = json.dumps(data)
+            req_urls = req_url + self.get_access_token()
+            resp = requests.post(url=req_urls, data=data).text
+            print(resp)
+            return resp
         except Exception as e:
-             print(e)
-             return
+            print(e)
+            return
 
 
     def get_time(self):
@@ -240,42 +229,6 @@ class MiMotion():
 
 if __name__ == "__main__":
     try:
-        #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
-        #    datas = json.loads(f.read())
-        datas = json.loads(os.environ["CONFIG"])
-        # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-        if datas.get("SKEY"):
-            skey = datas.get("SKEY")
-        else:
-            skey = "NO"
-        # 推送server酱
-        if datas.get("SCKEY"):
-            sckey = datas.get("SCKEY")
-        else:
-            sckey = "NO"
-        # 企业微信推送
-        # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
-        if datas.get("POSITION") or datas.get("CORPID") or datas.get("CORPSECRET") or datas.get("AGENTID") or datas.get("TOUSER") or datas.get("TOPARTY") or datas.get("TOTAG"):
-            position = datas.get("POSITION")
-            base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
-            req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
-            corpid = datas.get("CORPID")  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-            corpsecret = datas.get("CORPSECRET")  # 自建应用，每个自建应用里都有单独的secret
-            agentid = datas.get("AGENTID")  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-            touser = datas.get("TOUSER")  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-            toparty = datas.get("TOPARTY")  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-            totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-        else:
-            position = "false"
-            base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
-            req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
-            corpid = "NO"  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
-            corpsecret = "NO"  # 自建应用，每个自建应用里都有单独的secret
-            agentid = "NO"  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
-            touser = "NO"  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
-            toparty = "NO"  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-            totag = "NO"  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
-
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
             open_get_weather = datas.get("OPEN_GET_WEATHER")
@@ -298,9 +251,31 @@ if __name__ == "__main__":
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
         print(msg)
-        MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
-        MiMotion(check_item=_check_item).push_wx(msg)
-        MiMotion(check_item=_check_item).run(msg)
+        #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
+        #    datas = json.loads(f.read())
+        datas = json.loads(os.environ["CONFIG"])
+        # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
+        if datas.get("SKEY"):
+            skey = datas.get("SKEY")
+            MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
+        # 推送server酱
+        if datas.get("SCKEY"):
+            sckey = datas.get("SCKEY")
+            MiMotion(check_item=_check_item).push_wx(msg)
+
+        # 企业微信推送
+        # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
+        if datas.get("POSITION") or datas.get("CORPID") or datas.get("CORPSECRET") or datas.get("AGENTID") or datas.get("TOUSER") or datas.get("TOPARTY") or datas.get("TOTAG"):
+            position = datas.get("POSITION")
+            base_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?'
+            req_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token='
+            corpid = datas.get("CORPID")  # 企业ID， 登陆企业微信，在我的企业-->企业信息里查看
+            corpsecret = datas.get("CORPSECRET")  # 自建应用，每个自建应用里都有单独的secret
+            agentid = datas.get("AGENTID")  # 填写你的应用ID，不加引号，是个整型常数,就是AgentId
+            touser = datas.get("TOUSER")  # 指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为”@all”，则向该企业应用的全部成员发送
+            toparty = datas.get("TOPARTY")  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+            totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
+            MiMotion(check_item=_check_item).run(msg)
         #推送CONFIG配置
         #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
