@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-import requests, time, datetime, re, sys, os, json, random, math
+import requests, time, datetime, re, sys, os, json, random, math, traceback
 global skey,sckey,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 
 class MiMotion():
@@ -19,8 +19,8 @@ class MiMotion():
             # 输出发送结果
             print(res)
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
     # 推送server
     def push_wx(self,desp=""):
@@ -34,8 +34,8 @@ class MiMotion():
             response = requests.get(server_url, params=params).text
             print(response)
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
     # 企业微信
     def get_access_token(self):
@@ -45,8 +45,8 @@ class MiMotion():
             access_token = resp['access_token']
             return access_token
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
     def run(self,msg):
         try:
@@ -70,8 +70,8 @@ class MiMotion():
             print(resp)
             return resp
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
 
     def get_time(self):
@@ -81,8 +81,8 @@ class MiMotion():
             t = response["data"]["t"]
             return t
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
     def get_app_token(self, login_token):
         try:
@@ -91,8 +91,8 @@ class MiMotion():
             app_token = response["token_info"]["app_token"]
             return app_token
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
 
     @staticmethod
     def login(user, password):
@@ -146,8 +146,9 @@ class MiMotion():
             userid = r2["token_info"]["user_id"]
             return login_token, userid
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
+            return None, None
 
     def main(self):
         try:
@@ -169,8 +170,8 @@ class MiMotion():
                 max_ratio = 0.9
                 step_ratio = random.uniform(min_ratio, max_ratio)
         except Exception as e:
-            print(e)
-            return
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
         try:
             min_step = math.ceil(int(self.check_item.get("min_step", 10000))*step_ratio)
         except Exception as e:
@@ -226,13 +227,13 @@ class MiMotion():
                 msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
                 return msg
             except Exception as e:
-                print(e)
-                return
+                error_traceback = traceback.format_exc()
+                print(error_traceback)
 
 if __name__ == "__main__":
     try:
         #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
-        #datas = json.loads(f.read())
+            Wdatas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
@@ -280,4 +281,6 @@ if __name__ == "__main__":
         #推送CONFIG配置
         #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
-        print(e)
+        # 获取报错位置的详细信息
+        error_traceback = traceback.format_exc()
+        print(error_traceback)
