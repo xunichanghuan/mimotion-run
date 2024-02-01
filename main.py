@@ -235,11 +235,10 @@ if __name__ == "__main__":
         #datas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
         msg = ""
-        for i in range(len(datas.get("MIMOTION", []))):
-            #print(i)
-            _check_item = datas.get("MIMOTION", [])[i]
-            #print(_check_item)
-            msg += MiMotion(check_item=_check_item).main()
+        if datas.get("MIMOTION"):
+            for _check_item in datas.get("MIMOTION", []):
+                msg += MiMotion(check_item=_check_item).main()
+
         # 判断msg变量是否为空
         if msg:
             print(msg)
