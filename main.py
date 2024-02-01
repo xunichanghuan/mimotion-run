@@ -234,8 +234,7 @@ if __name__ == "__main__":
         datas = json.loads(os.environ["CONFIG"])
         msg = ""
         mimotion_data = datas.get("MIMOTION", [])
-        for i in range(len(mimotion_data)):
-            _check_item = mimotion_data[i]
+        for _check_item in mimotion_data:
             msg += MiMotion(check_item=_check_item).main()
         print(msg)
 
