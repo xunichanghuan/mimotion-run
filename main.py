@@ -234,6 +234,7 @@ if __name__ == "__main__":
         #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
         #datas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
+        MiMotion().run(datas)
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
             open_get_weather = datas.get("OPEN_GET_WEATHER")
