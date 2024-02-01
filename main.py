@@ -233,6 +233,8 @@ if __name__ == "__main__":
     try:
         #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
         #datas = json.loads(f.read())
+        #推送CONFIG配置
+        MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
         datas = json.loads(os.environ["CONFIG"])
         # 开启根据地区天气情况降低步数（默认关闭）
         if datas.get("OPEN_GET_WEATHER"):
@@ -277,7 +279,5 @@ if __name__ == "__main__":
             toparty = datas.get("TOPARTY")  # 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             MiMotion(check_item=_check_item).run(msg)
-        #推送CONFIG配置
-        #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
         print(e)
