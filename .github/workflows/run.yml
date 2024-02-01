@@ -30,5 +30,6 @@ jobs:
         env:
           CONFIG: ${{ secrets.CONFIG }}
         run: |
-          pip3 install requests
+          pip install --upgrade pip
+          pip install requests
           python3 main.py
