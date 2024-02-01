@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math
-global skey,sckey,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
+global skey,sckey,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag
 
 class MiMotion():
     name = "小米运动"
@@ -234,22 +234,6 @@ if __name__ == "__main__":
         #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
         #datas = json.loads(f.read())
         datas = json.loads(os.environ["CONFIG"])
-        print(datas)
-        # 开启根据地区天气情况降低步数（默认关闭）
-        if datas.get("OPEN_GET_WEATHER"):
-            open_get_weather = datas.get("OPEN_GET_WEATHER")
-        else:
-            open_get_weather = "False"
-        # 设置获取天气的地区（上面开启后必填）如：area = "宁波"
-        if datas.get("AREA"):
-            area = datas.get("AREA")
-        else:
-            area = "NO"
-        # 和风天气 Private KEY
-        if datas.get("OPEN_GET_WEATHER"):
-            qweather = datas.get("OPEN_GET_WEATHER")
-        else:
-            qweather = "False"
         msg = ""
         for i in range(len(datas.get("MIMOTION", []))):
             #print(i)
