@@ -88,13 +88,14 @@ class MiMotion():
         try:
             url = f"https://account-cn.huami.com/v1/client/app_tokens?app_name=com.xiaomi.hm.health&dn=api-user.huami.com%2Capi-mifit.huami.com%2Capp-analytics.huami.com&login_token={login_token}"
             response = requests.get(url=url, headers=self.headers).json()
+            print(response)
             app_token = response["token_info"]["app_token"]
             return app_token
         except Exception as e:
-            error_traceback = traceback.format_exc()
-            print(error_traceback)
-
+            print(e)
+            return
     @staticmethod
+
     def login(user, password):
         try:
             url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
@@ -110,9 +111,15 @@ class MiMotion():
             }
 
             r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
+            #print(r1)
             location = r1.headers["Location"]
             code_pattern = re.compile("(?<=access=).*?(?=&)")
-            code = code_pattern.findall(location)[0]
+            code_matches = code_pattern.findall(location)
+            if len(code_matches) > 0:
+                code = code_matches[0]
+            else:
+                print("Code not found in location")
+                return None, None
             url2 = "https://account.huami.com/v2/client/login"        
             if "+86" in user:
                 data2 = {
@@ -142,13 +149,14 @@ class MiMotion():
                     "third_name": "email",
                 }
             r2 = requests.post(url=url2, data=data2, headers=headers).json()
+            #print(r2)
             login_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
             return login_token, userid
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
-            return None, None
+            return 0, None
 
     def main(self):
         try:
