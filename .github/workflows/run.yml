@@ -28,7 +28,7 @@ jobs:
           python-version: 3.8
       - name: 开始
         env:
-          CONFIG: ${{secrets.CONFIG }}
+          CONFIG: ${{ secrets.CONFIG }}
         run: |
           pip3 install requests
           python3 main.py
