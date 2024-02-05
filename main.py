@@ -88,7 +88,7 @@ class MiMotion():
         try:
             url = f"https://account-cn.huami.com/v1/client/app_tokens?app_name=com.xiaomi.hm.health&dn=api-user.huami.com%2Capi-mifit.huami.com%2Capp-analytics.huami.com&login_token={login_token}"
             response = requests.get(url=url, headers=self.headers).json()
-            print(response)
+            #print(response)
             app_token = response["token_info"]["app_token"]
             return app_token
         except Exception as e:
