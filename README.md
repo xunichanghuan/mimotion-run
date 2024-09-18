@@ -4,10 +4,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
 
-# 小米运动自动刷步数
-
-> 小米运动自动刷步数
-
 ## Github Actions 部署指南
 
 ### 一、Fork 此仓库
