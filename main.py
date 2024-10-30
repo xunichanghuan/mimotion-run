@@ -42,8 +42,9 @@ class MiMotion():
         try:
             print("\nTelegram 推送开始")
             send_data = {"chat_id": tg_user_id, "text": title + '\n\n'+content, "disable_web_page_preview": "true"}
-            response = requests.post(url='https://api.telegram.org/bot%s/sendMessage' % (tg_bot_token), data=send_data)
-            print(response.text)
+            response = requests.post(
+                url=f'https://api.telegram.org/bot{tg_bot_token}/sendMessage', data=send_data)
+            print(response.json()['ok'])
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
