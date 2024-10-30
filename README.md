@@ -17,6 +17,8 @@
 添加名为  **CONFIG**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱,手机号
 ```
 {
+  "TG_BOT_TOKEN": "telegram TG_BOT_TOKEN，如果没有，请留空",
+  "TG_USER_ID": "telegram TG_USER_ID，如果没有，请留空",
   "SKEY": "酷推skey，如果没有，请留空",
   "SCKEY": "server酱sckey，如果没有，请留空",
   "POSITION": "是否开启企业微信推送，如果没有，请留空",
@@ -54,6 +56,8 @@
 **CONFIG**示例
 ```
 {
+  "TG_BOT_TOKEN": "",
+  "TG_USER_ID": "",
   "SKEY": "",
   "SCKEY": "",
   "POSITION": "",
