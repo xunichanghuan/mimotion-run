@@ -76,9 +76,9 @@ class MiMotion():
 
     def get_time(self):
         try:
-            url = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"
+            url = "http://mshopact.vivo.com.cn/tool/config"
             response = requests.get(url, headers=self.headers).json()
-            t = response["data"]["t"]
+            t = response["data"]["nowTime"]
             return t
         except Exception as e:
             error_traceback = traceback.format_exc()
