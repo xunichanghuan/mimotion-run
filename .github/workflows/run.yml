@@ -7,6 +7,7 @@ on:
   #  branches: [ master ]
   schedule:
     - cron: '3 0,2,5,7,9,11,12 * * *'
+
   watch:
     types: started
   workflow_dispatch:
