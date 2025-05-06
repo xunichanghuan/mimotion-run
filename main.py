@@ -42,6 +42,7 @@ class MiMotion():
         try:
             print("\nTelegram 推送开始")
             title = "tt"
+            content = "tl,begin"
             send_data = {"chat_id": tg_user_id, "text": title + '\n\n'+content, "disable_web_page_preview": "true"}
             response = requests.post(
                 url=f'https://api.telegram.org/bot{tg_bot_token}/sendMessage', data=send_data)
