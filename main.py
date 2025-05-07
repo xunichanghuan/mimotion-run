@@ -133,6 +133,7 @@ class MiMotion():
                 code = code_matches[0]
             else:
                 print("Code not found in location")
+                print("r1.headers", r1.headers)
                 return None, None
             url2 = "https://account.huami.com/v2/client/login"        
             if "+86" in user:
