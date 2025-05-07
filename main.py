@@ -41,8 +41,8 @@ class MiMotion():
     def push_telegram(self,msg):
         try:
             print("\nTelegram 推送开始")
-            title = "tt"
-            content = "tl,begin"
+            title = "小米运动刷新推送"
+            content = "【小米运动步数修改】\n" + msg
             send_data = {"chat_id": tg_user_id, "text": title + '\n\n'+content, "disable_web_page_preview": "true"}
             response = requests.post(
                 url=f'https://api.telegram.org/bot{tg_bot_token}/sendMessage', data=send_data)
