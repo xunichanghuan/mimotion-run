@@ -110,39 +110,75 @@ class MiMotion():
 
     def login(user, password):
         try:
-            url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
+            # url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
+            url1 = f"https://api-user.zepp.com/registrations/{user}/tokens"
             headers = {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-                "User-Agent": "MiFit/4.6.0 (iPhone; iOS 14.0.1; Scale/2.00)",
+                # "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                # "User-Agent": "MiFit/4.6.0 (iPhone; iOS 14.0.1; Scale/2.00)",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
+                "app_name": "com.xiaomi.hm.health"
             }
             data1 = {
-                "client_id": "HuaMi",
-                "password": f"{password}",
-                "redirect_uri": "https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html",
-                "token": "access",
+                # "client_id": "HuaMi",
+                # "password": f"{password}",
+                # "redirect_uri": "https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html",
+                # "token": "access",
+                "client_id":"HuaMi",
+                "country_code":"CN",
+                "json_response":"true",
+                "name":f"{user}",
+                "password":f"{password}",
+                "redirect_uri":"https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html",
+                "state":"REDIRECTION",
+                "token":"access"
             }
 
-            r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
-            #print(r1)
-            location = r1.headers["Location"]
-            code_pattern = re.compile("(?<=access=).*?(?=&)")
-            code_matches = code_pattern.findall(location)
-            if len(code_matches) > 0:
-                code = code_matches[0]
-            else:
-                print("Code not found in location")
-                return None, None
-            url2 = "https://account.huami.com/v2/client/login"        
+            try:
+                r1 = requests.post(url=url1, data=data1, headers=headers, allow_redirects=False)
+                #print(r1)
+                # location = r1.headers["Location"]
+                # code_pattern = re.compile("(?<=access=).*?(?=&)")
+                # code_matches = code_pattern.findall(location)
+                # if len(code_matches) > 0:
+                #     code = code_matches[0]
+                # else:
+                #     print("Code not found in location")
+                #     return None, None
+                
+                if r1.status_code == 429:
+                    return 0, 0, "请求过于频繁，请变换IP后再试"
+
+                r1 = r1.json()
+                code = r1["access"]
+            except Exception as e:
+                print("登录失败:", e)
+                return 0, 0, "登录失败"
+
+            # url2 = "https://account.huami.com/v2/client/login"  
+            url2 = "https://account.zepp.com/v2/client/login"      
             if "+86" in user:
+                third_name = "huami_phone"
                 data2 = {
-                    "app_name": "com.xiaomi.hm.health",
-                    "app_version": "5.0.2",
-                    "code": f"{code}",
-                    "country_code": "CN",
-                    "device_id": "10E2A98F-D36F-4DF1-A7B9-3FBD8FBEB800",
-                    "device_model": "phone",
-                    "grant_type": "access_token",
-                    "third_name": "huami_phone",
+                    # "app_name": "com.xiaomi.hm.health",
+                    # "app_version": "5.0.2",
+                    # "code": f"{code}",
+                    # "country_code": "CN",
+                    # "device_id": "10E2A98F-D36F-4DF1-A7B9-3FBD8FBEB800",
+                    # "device_model": "phone",
+                    # "grant_type": "access_token",
+                    # "third_name": "huami_phone",
+                    "app_name":"com.xiaomi.hm.health",
+                    "country_code":"CN",
+                    "code":f"{code}",
+                    "device_id":"fuck1069-2002-7869-0129-757geoi6sam1",
+                    "device_model":"android_phone",
+                    "app_version":"6.12.0",
+                    "grant_type":"access_token",
+                    "allow_registration":"false",
+                    "dn":"account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
+                    "source":"com.xiaomi.hm.health",
+                    "third_name":f"{third_name}"
                 }
             if "@" in user:
                 data2 = {
@@ -162,9 +198,13 @@ class MiMotion():
                 }
             r2 = requests.post(url=url2, data=data2, headers=headers).json()
             #print(r2)
+            # login_token = r2["token_info"]["login_token"]
+            # userid = r2["token_info"]["user_id"]
+            # return login_token, userid
             login_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
-            return login_token, userid
+            app_token = r2["token_info"]["app_token"]
+            return login_token, userid, app_token
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
