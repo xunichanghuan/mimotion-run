@@ -157,7 +157,7 @@ class MiMotion():
                 print("响应内容:", r1.text)
             except:
                 pass
-            print"登录失败")
+            print("登录失败")
             return 0, 0, 0
 
         # ---------- 阶段 2：拿 token ----------
