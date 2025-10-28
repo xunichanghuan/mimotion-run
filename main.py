@@ -325,7 +325,7 @@ if __name__ == "__main__":
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
             time.sleep(10)
-        print(msg)
+        #print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
             skey = datas.get("SKEY")
@@ -339,8 +339,7 @@ if __name__ == "__main__":
             tg_bot_token = datas.get("TG_BOT_TOKEN")
             tg_user_id = datas.get("TG_USER_ID")
             MiMotion(check_item=_check_item).push_telegram(msg)
-        else:
-            print("Telegram推送的tg_bot_token或者tg_user_id未设置!!\n取消推送")
+
         # 企业微信推送
         # 是否开启企业微信推送false关闭true开启，默认关闭，开启后请填写设置并将上面两个都留空
         if datas.get("POSITION"):
