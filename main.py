@@ -234,8 +234,8 @@ class MiMotion():
         step = str(random.randint(min_step, max_step))
 
         # ---------- 3. 登录 ----------
-        login_token, userid, msg = self.login(user, password)
-        if 0 in (login_token, userid):
+        login_token, userid, app_token = self.login(user, password)
+        if 0 in (login_token, userid, app_token):
             msg = f"帐号信息: {user[:4]}****{user[-4:]}\n修改信息: 登录失败\n"
             print(msg)
             return msg
