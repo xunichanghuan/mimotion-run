@@ -101,7 +101,7 @@ class MiMotion():
             print(error_traceback)
 
 
-  def login(self, phone: str, password: str):
+  def login(self, phone, password):
     import re, requests, traceback
 
     email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
