@@ -132,10 +132,11 @@ class MiMotion():
 
         try:
             r1 = requests.post(url1, data=data1, headers=self.headers)
+            if r1.status_code != 200:
+                print(r1.text)
             if r1.status_code == 429:
                 print("请求过于频繁，请变换IP后再试")
                 return 0, 0, 0
-
             r1 = r1.json()
             code = r1["access"]
         except Exception as e:
@@ -147,6 +148,8 @@ class MiMotion():
 
         try:
             r2 = requests.post(url=url2, data=data2, headers=self.headers).json()
+            if r2.status_code != 200:
+                print(r1.text)
             login_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
             app_token = r2["token_info"]["app_token"]
@@ -171,6 +174,7 @@ class MiMotion():
                 max_ratio = int(hour) / 21
                 step_ratio = random.uniform(min_ratio, max_ratio)
             else:
+                print(r.text)
                 min_ratio = 0.5
                 max_ratio = 0.9
                 step_ratio = random.uniform(min_ratio, max_ratio)
@@ -222,6 +226,8 @@ class MiMotion():
                 }
                 data = f"userid={userid}&last_sync_data_time=1628256960&device_type=0&last_deviceid=C4BDB6FFFE2BCA4C&data_json={data_json}"
                 response = requests.post(url=url, data=data, headers=headers).json()
+                if response.status_code != 200:
+                print(response.text)
                 if response['message'] == "success":
                     msg = [
                     {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
