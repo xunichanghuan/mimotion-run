@@ -189,7 +189,7 @@ class MiMotion():
 
         step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
-        if login_token == 0:
+        if login_token == 0 and userid == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
                 {"name": "修改信息", "value": f"登陆失败\n"},
@@ -227,9 +227,8 @@ class MiMotion():
                 error_traceback = traceback.format_exc()
                 print(error_traceback)
                 return f"【异常】账号 {user[:4]}****{user[-4:]} 提交失败：{e}\n"
-            
-            # ✅ 添加默认返回值，防止 None
-            return f"【未知】账号 {user[:4]}****{user[-4:]} 未正确执行\n"
+        # ✅ 添加默认返回值，防止 None
+        return f"【未知】账号 {user[:4]}****{user[-4:]} 未正确执行\n"
 
 if __name__ == "__main__":
     try:
@@ -291,3 +290,6 @@ if __name__ == "__main__":
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
         print(error_traceback)
+  File "main.py", line 257, in <module>
+    msg += MiMotion(check_item=_check_item).main()
+TypeError: can only concatenate str (not "NoneType") to str
