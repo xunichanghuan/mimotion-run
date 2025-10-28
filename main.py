@@ -133,7 +133,7 @@ class MiMotion():
         try:
             r1 = requests.post(url1, data=data1, headers=self.headers)
             if r1.status_code != 200:
-                print(r1.text)
+                print(r1.json())
             if r1.status_code == 429:
                 print("请求过于频繁，请变换IP后再试")
                 return 0, 0, 0
@@ -148,14 +148,13 @@ class MiMotion():
 
         try:
             r2 = requests.post(url=url2, data=data2, headers=self.headers).json()
-            if r2.status_code != 200:
-                print(r1.text)
             login_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
             app_token = r2["token_info"]["app_token"]
             return login_token, userid, app_token
         except Exception as e:
             print("获取token失败:", e)
+            print(r2)
             return 0, 0, 0
 
     def main(self):
@@ -181,6 +180,7 @@ class MiMotion():
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
+            print(r.json())
 
         try:
             # 从配置获取min_step并计算（带默认值和向上取整）
