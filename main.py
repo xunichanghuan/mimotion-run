@@ -246,7 +246,7 @@ class MiMotion():
             user = user
         else:
             user = "+86" + user
-        login_token, userid = self.login(user, password)
+        login_token, userid, app_token = self.login(user, password)
         if login_token == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
