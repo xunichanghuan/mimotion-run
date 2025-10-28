@@ -147,7 +147,10 @@ class MiMotion():
         data2 = f"app_name=com.xiaomi.hm.health&country_code=CN&code={code}&device_id=fuck1069-2002-7869-0129-757geoi6sam1&device_model=android_phone&app_version=6.12.0&grant_type=access_token&allow_registration=false&dn=account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com&source=com.xiaomi.hm.health&third_name={third_name}"
 
         try:
-            r2 = requests.post(url=url2, data=data2, headers=self.headers).json()
+            rq2 = requests.post(url=url2, data=data2, headers=self.headers)
+            r2 = rq2.json()
+            if rq2.status_code != 200:
+                print(r2)
             login_token = r2["token_info"]["login_token"]
             userid = r2["token_info"]["user_id"]
             app_token = r2["token_info"]["app_token"]
@@ -273,7 +276,7 @@ if __name__ == "__main__":
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
-            time.sleep(3)
+            time.sleep(10)
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
