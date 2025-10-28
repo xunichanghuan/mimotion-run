@@ -188,9 +188,9 @@ class MiMotion():
                 "allow_registration": "false",
                 "dn": "api-user.huami.com,api-mifit.huami.com,app-analytics.huami.com",
                 "source": "com.xiaomi.hm.health",
-                "third_name": third_name
+                "third_name": third_name,
                 "os_version": "1.5.0",
-                "lang": "zh_CN",
+                "lang": "zh_CN"
             }
         else:  # 兜底
             data2 = {
