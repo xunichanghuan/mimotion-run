@@ -100,17 +100,6 @@ class MiMotion():
             error_traceback = traceback.format_exc()
             print(error_traceback)
 
-    def get_app_token(self, login_token):
-        try:
-            url = f"https://account-cn.huami.com/v1/client/app_tokens?app_name=com.xiaomi.hm.health&dn=api-user.huami.com%2Capi-mifit.huami.com%2Capp-analytics.huami.com&login_token={login_token}"
-            response = requests.get(url=url, headers=self.headers).json()
-            #print(response)
-            app_token = response["token_info"]["app_token"]
-            return app_token
-        except Exception as e:
-            print(e)
-            return
-    @staticmethod
 
     def login(self, phone, password):
         phone_pattern = r"(^(1)\d{10}$)"
@@ -246,7 +235,7 @@ if __name__ == "__main__":
             #print(i)
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
-            msg += print(MiMotion(check_item=_check_item).main())
+            print(MiMotion(check_item=_check_item).main())
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
