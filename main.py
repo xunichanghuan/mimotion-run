@@ -102,6 +102,30 @@ class MiMotion():
 
 
     def login(self, user, password):
+        # 正则定义
+        email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        phone_pattern = r"^1\d{10}$"
+        phone_with_86_pattern = r"^\+861\d{10}$"
+
+        # 第一步：邮箱 → third_name = "email"
+        if re.fullmatch(email_pattern, phone):
+            user = phone
+            third_name = "email"
+
+        # 第二步：已带+86的手机号 → third_name = "huami_phone"
+        elif re.fullmatch(phone_with_86_pattern, phone):
+            user = phone
+            third_name = "huami_phone"
+
+        # 第三步：纯手机号（无+86）→ 补全+86，third_name = "huami_phone"
+        elif re.fullmatch(phone_pattern, phone):
+            user = f"+86{phone}"
+            third_name = "huami_phone"
+
+        # 其他情况 → 保持原样，third_name = "huami_phone"
+        else:
+            user = phone
+            third_name = "huami_phone"
         """返回 (login_token, user_id, app_token) 任意一步失败返回 (0, 0, msg)"""
         # ---------- 阶段 1：拿 code ----------
         url1 = f"https://api-user.zepp.com/registrations/{user}/tokens"   # 去空格
@@ -139,7 +163,6 @@ class MiMotion():
         # ---------- 阶段 2：拿 token ----------
         url2 = "https://account.zepp.com/v2/client/login"
         if "+86" in user:
-            third_name = "huami_phone"
             data2 = {
                 "app_name": "com.xiaomi.hm.health",
                 "country_code": "CN",
@@ -151,7 +174,7 @@ class MiMotion():
                 "allow_registration": "false",
                 "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
                 "source": "com.xiaomi.hm.health",
-                "third_name": huami_phone
+                "third_name": third_name
             }
         elif "@" in user:
             data2 = {
@@ -167,7 +190,7 @@ class MiMotion():
                 "lang": "zh_CN",
                 "os_version": "1.5.0",
                 "source": "com.xiaomi.hm.health",
-                "third_name": "email"
+                "third_name": third_name
             }
         else:  # 兜底
             data2 = {
@@ -181,7 +204,7 @@ class MiMotion():
                 "allow_registration": "false",
                 "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
                 "source": "com.xiaomi.hm.health",
-                "third_name": "huami"
+                "third_name": third_name
             }
 
         try:
