@@ -178,22 +178,29 @@ class MiMotion():
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
+
         try:
-            min_step = math.ceil(int(self.check_item.get("min_step", 10000))*step_ratio)
+            # 从配置获取min_step并计算（带默认值和向上取整）
+            min_step = math.ceil(int(self.check_item.get("min_step", 10000)) * step_ratio)
         except Exception as e:
-            print("初始化步数失败: 已将最小值设置为 19999", e)
-            min_step = 10000
+            print(f"初始化最小步数失败: 已将最小值设置为 10000，错误：{e}")
+            min_step = 10000  # 异常时的默认最小值
+        
         try:
-            max_step = math.ceil(int(self.check_item.get("max_step", 19999))*step_ratio)
+            # 从配置获取max_step并计算（带默认值和向上取整）
+            max_step = math.ceil(int(self.check_item.get("max_step", 19999)) * step_ratio)
         except Exception as e:
-            print("初始化步数失败: 已将最大值设置为 19999", e)
-            max_step = 19999
-        # 核心修正：确保min_step <= max_step，若颠倒则交换
+            print(f"初始化步数失败: 已将最大值设置为 19999，错误：{e}")
+            max_step = 19999  # 异常时的默认最大值
+        
+        # 确保最小步数不大于最大步数（核心修正）
         if min_step > max_step:
-            # 打印警告日志，便于排查配置或比例问题
             print(f"警告：最小步数({min_step})大于最大步数({max_step})，已自动交换")
-            min_step, max_step = max_step, min_step  # 交换两者
-            step = str(random.randint(min_step, max_step))
+            min_step, max_step = max_step, min_step  # 交换后min <= max
+        
+        # 生成随机步数（无论是否交换，此处都能保证范围有效）
+        step = str(random.randint(min_step, max_step))
+
         login_token, userid, app_token = self.login(user, password)
         if login_token == 0 or userid == 0 or app_token == 0:
             msg = [
