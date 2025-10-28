@@ -7,7 +7,11 @@ class MiMotion():
 
     def __init__(self, check_item):
         self.check_item = check_item
-        self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
+        self.headers = {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
+            "app_name": "com.xiaomi.hm.health",
+        }
 
    #发送酷推
     def push(self, title, content):
@@ -206,7 +210,7 @@ class MiMotion():
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
-            return 0, 0, None
+            return f"【异常】帐号 {user[:4]}****{user[-4:]} 修改步数失败：{str(e)}\n"
 
     def main(self):
         try:
