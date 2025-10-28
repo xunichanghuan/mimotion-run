@@ -193,7 +193,7 @@ class MiMotion():
             # 打印警告日志，便于排查配置或比例问题
             print(f"警告：最小步数({min_step})大于最大步数({max_step})，已自动交换")
             min_step, max_step = max_step, min_step  # 交换两者
-                step = str(random.randint(min_step, max_step))
+            step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
         if login_token == 0 or userid == 0 or app_token == 0:
             msg = [
