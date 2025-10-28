@@ -190,7 +190,6 @@ class MiMotion():
 
         step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
-        print((userid))
         if login_token == 0 or userid == 0 or app_token == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
@@ -259,6 +258,7 @@ if __name__ == "__main__":
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
+            time.sleep(3)
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
