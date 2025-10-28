@@ -133,13 +133,14 @@ class MiMotion():
         try:
             r1 = requests.post(url1, data=data1, headers=self.headers)
             if r1.status_code == 429:
-                return 0, 0, "请求过于频繁，请变换IP后再试"
+                print("请求过于频繁，请变换IP后再试")
+                return 0, 0, 0
 
             r1 = r1.json()
             code = r1["access"]
         except Exception as e:
             print("登录失败:", e)
-            return 0, 0, "登录失败"
+            return 0, 0, 0
 
         url2 = "https://account.zepp.com/v2/client/login"
         data2 = f"app_name=com.xiaomi.hm.health&country_code=CN&code={code}&device_id=fuck1069-2002-7869-0129-757geoi6sam1&device_model=android_phone&app_version=6.12.0&grant_type=access_token&allow_registration=false&dn=account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com&source=com.xiaomi.hm.health&third_name={third_name}"
@@ -190,7 +191,7 @@ class MiMotion():
         step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
         print((userid))
-        if login_token == 0 and userid == 0:
+        if login_token == 0 or userid == 0 or app_token == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
                 {"name": "修改信息", "value": f"登陆失败\n"},
