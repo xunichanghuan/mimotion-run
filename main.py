@@ -154,7 +154,7 @@ class MiMotion():
             return login_token, userid, app_token
         except Exception as e:
             print("获取token失败:", e)
-            return 0, 0, "获取token失败"
+            return 0, 0, 0
 
     def main(self):
         try:
