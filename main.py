@@ -290,6 +290,3 @@ if __name__ == "__main__":
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
         print(error_traceback)
-  File "main.py", line 257, in <module>
-    msg += MiMotion(check_item=_check_item).main()
-TypeError: can only concatenate str (not "NoneType") to str
