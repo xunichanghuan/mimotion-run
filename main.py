@@ -280,7 +280,7 @@ if __name__ == "__main__":
             totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             MiMotion(check_item=_check_item).run(msg)
         #推送CONFIG配置
-        #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
+        MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
