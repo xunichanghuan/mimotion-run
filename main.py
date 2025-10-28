@@ -137,7 +137,6 @@ class MiMotion():
                 return 0, 0, 0
 
             r1 = r1.json()
-            print(f"{r1} {user}")
             code = r1["access"]
         except Exception as e:
             print("登录失败:", e)
@@ -185,19 +184,19 @@ class MiMotion():
         except Exception as e:
             print(f"初始化最小步数失败: 已将最小值设置为 10000，错误：{e}")
             min_step = 10000  # 异常时的默认最小值
-        
+
         try:
             # 从配置获取max_step并计算（带默认值和向上取整）
             max_step = math.ceil(int(self.check_item.get("max_step", 19999)) * step_ratio)
         except Exception as e:
             print(f"初始化步数失败: 已将最大值设置为 19999，错误：{e}")
             max_step = 19999  # 异常时的默认最大值
-        
+
         # 确保最小步数不大于最大步数（核心修正）
         if min_step > max_step:
             print(f"警告：最小步数({min_step})大于最大步数({max_step})，已自动交换")
             min_step, max_step = max_step, min_step  # 交换后min <= max
-        
+
         # 生成随机步数（无论是否交换，此处都能保证范围有效）
         step = str(random.randint(min_step, max_step))
 
