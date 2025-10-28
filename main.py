@@ -189,6 +189,7 @@ class MiMotion():
 
         step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
+        print(f"{user[:4]}****{user[-4:]}"+login_token)
         if login_token == 0 and userid == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
@@ -222,6 +223,7 @@ class MiMotion():
                         {"name": "修改信息", "value": f"登陆失败\n"},
                     ]
                 msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
+                print(msg)
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
@@ -285,7 +287,7 @@ if __name__ == "__main__":
             totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             MiMotion(check_item=_check_item).run(msg)
         #推送CONFIG配置
-        MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
+        #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
