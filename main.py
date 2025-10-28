@@ -189,7 +189,7 @@ class MiMotion():
 
         step = str(random.randint(min_step, max_step))
         login_token, userid, app_token = self.login(user, password)
-        print(f"{user[:4]}****{user[-4:]}"+(userid))
+        print((userid))
         if login_token == 0 and userid == 0:
             msg = [
                 {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
