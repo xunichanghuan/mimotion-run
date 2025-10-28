@@ -226,8 +226,6 @@ class MiMotion():
                 }
                 data = f"userid={userid}&last_sync_data_time=1628256960&device_type=0&last_deviceid=C4BDB6FFFE2BCA4C&data_json={data_json}"
                 response = requests.post(url=url, data=data, headers=headers).json()
-                if response.status_code != 200:
-                print(response.text)
                 if response['message'] == "success":
                     msg = [
                     {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
