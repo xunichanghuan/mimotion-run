@@ -147,13 +147,13 @@ class MiMotion():
                 #     return None, None
                 
                 if r1.status_code == 429:
-                    return 0, 0, "请求过于频繁，请变换IP后再试"
+                    return 0, "请求过于频繁，请变换IP后再试"
 
                 r1 = r1.json()
                 code = r1["access"]
             except Exception as e:
                 print("登录失败:", e)
-                return 0, 0, "登录失败"
+                return 0, "登录失败"
 
             # url2 = "https://account.huami.com/v2/client/login"  
             url2 = "https://account.zepp.com/v2/client/login"      
@@ -314,7 +314,7 @@ if __name__ == "__main__":
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
             msg += MiMotion(check_item=_check_item).main()
-            print(msg)
+            #print(msg)
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
