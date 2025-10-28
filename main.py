@@ -137,7 +137,7 @@ class MiMotion():
                 return 0, 0, 0
 
             r1 = r1.json()
-            print(str(r1+user))
+            print(f"{r1} {user}")
             code = r1["access"]
         except Exception as e:
             print("登录失败:", e)
