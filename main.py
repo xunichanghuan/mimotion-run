@@ -319,16 +319,12 @@ if __name__ == "__main__":
         else:
             qweather = "False"
         msg = ""
-        for idx, item in enumerate(datas.get("MIMOTION", []), start=1):
-            try:
-                mi = MiMotion(check_item=item)
-                msg += mi.main()
-            except Exception as e:
-                # 把异常详情和账号序号打出来，方便排查
-                print(f"[第 {idx} 个账号异常] {e}")
-                print(traceback.format_exc())
-                msg += f"[第 {idx} 个账号] 执行失败\n"
-            time.sleep(15)
+        for i in range(len(datas.get("MIMOTION", []))):
+            #print(i)
+            _check_item = datas.get("MIMOTION", [])[i]
+            #print(_check_item)
+            msg += MiMotion(check_item=_check_item).main()
+            time.sleep(10)
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
