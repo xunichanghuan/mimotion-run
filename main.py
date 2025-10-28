@@ -102,80 +102,126 @@ class MiMotion():
 
 
     def login(self, user, password):
-      import re, requests, traceback
+        # 正则定义
+        email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        phone_pattern = r"^1\d{10}$"
+        phone_with_86_pattern = r"^\+861\d{10}$"
 
-      email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-      phone_pattern = r"^1\d{10}$"
-      phone_with_86_pattern = r"^\+861\d{10}$"
+        # 第一步：邮箱 → third_name = "email"
+        if re.fullmatch(email_pattern, user):
+            user = user
+            third_name = "email"
 
-      if re.fullmatch(email_pattern, user):
-          user, third_name = user, "email"
-      elif re.fullmatch(phone_with_86_pattern, user):
-          user, third_name = user, "huami_phone"
-      elif re.fullmatch(phone_pattern, user):
-          user, third_name = f"+86{user}", "huami_phone"
-      else:
-          user, third_name = user, "huami_phone"
+        # 第二步：已带+86的手机号 → third_name = "huami_phone"
+        elif re.fullmatch(phone_with_86_pattern, user):
+            user = user
+            third_name = "huami_phone"
 
-      # 去掉 URL 尾巴的空格！
-      url1 = f"https://api-user.zepp.com/registrations/{user}/tokens"
-      data1 = (
-          "client_id=HuaMi&country_code=CN&json_response=true"
-          f"&name={user}&password={password}"
-          "&redirect_uri=https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html"
-          "&state=REDIRECTION&token=access"
-      )
+        # 第三步：纯手机号（无+86）→ 补全+86，third_name = "huami_phone"
+        elif re.fullmatch(phone_pattern, user):
+            user = f"+86{user}"
+            third_name = "huami_phone"
 
-      try:
-          r1 = requests.post(url1, data=data1, headers=self.headers, timeout=10)
-          if r1.status_code != 200:
-              print(f"[登录阶段1] 状态码={r1.status_code} 响应={r1.text}")
-              if r1.status_code == 429:
-                  print("请求过于频繁，请切换 IP 后再试")
-              return 0, 0, 0
-          r1_json = r1.json()
-          code = r1_json["access"]
-      except Exception as e:
-          print("[登录阶段1] 异常:", e)
-          # 防止 r1 未定义或没有 text
-          try:
-              print("响应内容:", r1.text)
-          except:
-              pass
-          return 0, 0, 0
+        # 其他情况 → 保持原样，third_name = "huami_phone"
+        else:
+            user = user
+            third_name = "huami_phone"
+        """返回 (login_token, user_id, app_token) 任意一步失败返回 (0, 0, msg)"""
+        # ---------- 阶段 1：拿 code ----------
+        url1 = f"https://api-user.zepp.com/registrations/{user}/tokens"   # 去空格
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
+            "app_name": "com.xiaomi.hm.health"
+        }
+        data1 = {
+            "client_id": "HuaMi",
+            "country_code": "CN",
+            "json_response": "true",
+            "name": user,
+            "password": password,
+            "redirect_uri": "https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html",
+            "state": "REDIRECTION",
+            "token": "access"
+        }
 
-      # 同样去掉 URL 空格
-      url2 = "https://account.zepp.com/v2/client/login"
-      data2 = (
-          "app_name=com.xiaomi.hm.health&country_code=CN"
-          f"&code={code}"
-          "&device_id=fuck1069-2002-7869-0129-757geoi6sam1"
-          "&device_model=android_phone&app_version=6.12.0"
-          "&grant_type=access_token&allow_registration=false"
-          "&dn=account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,"
-          "api-watch.zepp.com,app-analytics.zepp.com,"
-          "api-analytics.huami.com,auth.zepp.com"
-          "&source=com.xiaomi.hm.health"
-          f"&third_name={third_name}"
-      )
+        try:
+            r1 = requests.post(url1, data=data1, headers=headers, timeout=10, allow_redirects=False)
+            if r1.status_code != 200:
+                print(f"[登录阶段1] 状态码={r1.status_code} 响应={r1.text}")
+                return 0, 0, 0
+            code = r1.json()["access"]
+        except Exception as e:
+            print("[登录阶段1] 异常:", e)
+            try:
+                print("响应内容:", r1.text)
+            except:
+                pass
+            print("登录失败")
+            return 0, 0, 0
 
-      try:
-          rq2 = requests.post(url2, data=data2, headers=self.headers, timeout=10)
-          if rq2.status_code != 200:
-              print(f"[登录阶段2] 状态码={rq2.status_code} 响应={rq2.text}")
-              return 0, 0, 0
-          r2_json = rq2.json()
-          login_token = r2_json["token_info"]["login_token"]
-          userid = r2_json["token_info"]["user_id"]
-          app_token = r2_json["token_info"]["app_token"]
-          return login_token, userid, app_token
-      except Exception as e:
-          print("[登录阶段2] 获取 token 异常:", e)
-          try:
-              print("响应内容:", rq2.text)
-          except:
-              pass
-          return 0, 0, 0
+        # ---------- 阶段 2：拿 token ----------
+        url2 = "https://account.zepp.com/v2/client/login"
+        if "+86" in user:
+            data2 = {
+                "app_name": "com.xiaomi.hm.health",
+                "country_code": "CN",
+                "code": code,
+                "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
+                "device_model": "android_phone",
+                "app_version": "6.12.0",
+                "grant_type": "access_token",
+                "allow_registration": "false",
+                "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
+                "source": "com.xiaomi.hm.health",
+                "third_name": third_name
+            }
+        elif "@" in user:
+            data2 = {
+                "app_name": "com.xiaomi.hm.health",
+                "country_code": "CN",
+                "code": code,
+                "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
+                "device_model": "phone",
+                "app_version": "6.5.5",
+                "grant_type": "access_token",
+                "allow_registration": "false",
+                "dn": "api-user.huami.com,api-mifit.huami.com,app-analytics.huami.com",
+                "source": "com.xiaomi.hm.health",
+                "third_name": third_name
+                "os_version": "1.5.0",
+                "lang": "zh_CN",
+            }
+        else:  # 兜底
+            data2 = {
+                "app_name": "com.xiaomi.hm.health",
+                "country_code": "CN",
+                "code": code,
+                "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
+                "device_model": "android_phone",
+                "app_version": "6.12.0",
+                "grant_type": "access_token",
+                "allow_registration": "false",
+                "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
+                "source": "com.xiaomi.hm.health",
+                "third_name": third_name
+            }
+
+        try:
+            r2 = requests.post(url2, data=data2, headers=headers, timeout=10)
+            if r2.status_code != 200:
+                print(f"[登录阶段2] 状态码={r2.status_code} 响应={r2.text}")
+                return 0, 0, 0
+            info = r2.json()["token_info"]
+            return info["login_token"], info["user_id"], info["app_token"]
+        except Exception as e:
+            print("[登录阶段2] 异常:", e)
+            try:
+                print("响应内容:", r2.text)
+            except:
+                pass
+            print("获取 token 失败")
+            return 0, 0, 0
 
     def main(self):
         import time, random, math, traceback, requests, re
