@@ -106,22 +106,22 @@ class MiMotion():
         email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         phone_pattern = r"^1\d{10}$"
         phone_with_86_pattern = r"^\+861\d{10}$"
-        
+
         # 第一步：邮箱 → third_name = "huami"
         if re.fullmatch(email_pattern, phone):
             user = phone
             third_name = "huami"
-        
+
         # 第二步：已带+86的手机号 → third_name = "huami_phone"
         elif re.fullmatch(phone_with_86_pattern, phone):
             user = phone
             third_name = "huami_phone"
-        
+
         # 第三步：纯手机号（无+86）→ 补全+86，third_name = "huami_phone"
         elif re.fullmatch(phone_pattern, phone):
             user = f"+86{phone}"
             third_name = "huami_phone"
-        
+
         # 其他情况 → 保持原样，third_name = "huami"
         else:
             user = phone
@@ -226,7 +226,8 @@ class MiMotion():
             except Exception as e:
                 error_traceback = traceback.format_exc()
                 print(error_traceback)
-                return "操作失败：" + str(e)
+                return f"【异常】账号 {user[:4]}****{user[-4:]} 提交失败：{e}\n"
+            return f"【未知】账号 {user[:4]}****{user[-4:]} 未正确执行\n"
 
 if __name__ == "__main__":
     try:
@@ -253,7 +254,7 @@ if __name__ == "__main__":
             #print(i)
             _check_item = datas.get("MIMOTION", [])[i]
             #print(_check_item)
-            print(MiMotion(check_item=_check_item).main())
+            msg += MiMotion(check_item=_check_item).main()
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
         if datas.get("SKEY"):
@@ -283,7 +284,7 @@ if __name__ == "__main__":
             totag = datas.get("TOTAG")  # 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。当touser为”@all”时忽略本参数
             MiMotion(check_item=_check_item).run(msg)
         #推送CONFIG配置
-        MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
+        #MiMotion(check_item=_check_item).run(os.environ["CONFIG"])
     except Exception as e:
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
