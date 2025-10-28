@@ -108,23 +108,23 @@ class MiMotion():
         phone_with_86_pattern = r"^\+861\d{10}$"
 
         # 第一步：邮箱 → third_name = "email"
-        if re.fullmatch(email_pattern, phone):
-            user = phone
+        if re.fullmatch(email_pattern, user):
+            user = user
             third_name = "email"
 
         # 第二步：已带+86的手机号 → third_name = "huami_phone"
-        elif re.fullmatch(phone_with_86_pattern, phone):
-            user = phone
+        elif re.fullmatch(phone_with_86_pattern, user):
+            user = user
             third_name = "huami_phone"
 
         # 第三步：纯手机号（无+86）→ 补全+86，third_name = "huami_phone"
-        elif re.fullmatch(phone_pattern, phone):
-            user = f"+86{phone}"
+        elif re.fullmatch(phone_pattern, user):
+            user = f"+86{user}"
             third_name = "huami_phone"
 
         # 其他情况 → 保持原样，third_name = "huami_phone"
         else:
-            user = phone
+            user = user
             third_name = "huami_phone"
         """返回 (login_token, user_id, app_token) 任意一步失败返回 (0, 0, msg)"""
         # ---------- 阶段 1：拿 code ----------
@@ -162,50 +162,19 @@ class MiMotion():
 
         # ---------- 阶段 2：拿 token ----------
         url2 = "https://account.zepp.com/v2/client/login"
-        if "+86" in user:
-            data2 = {
-                "app_name": "com.xiaomi.hm.health",
-                "country_code": "CN",
-                "code": code,
-                "device_id": "fuck1069-2002-7869-0129-757geoi6sam1",
-                "device_model": "android_phone",
-                "app_version": "6.12.0",
-                "grant_type": "access_token",
-                "allow_registration": "false",
-                "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
-                "source": "com.xiaomi.hm.health",
-                "third_name": third_name
-            }
-        elif "@" in user:
-            data2 = {
-                "allow_registration": "false",
-                "app_name": "com.xiaomi.hm.health",
-                "app_version": "6.5.5",
-                "code": code,
-                "country_code": "CN",
-                "device_id": "2C8B4939-0CCD-4E94-8CBA-CB8EA6E613A1",
-                "device_model": "phone",
-                "dn": "api-user.huami.com,api-mifit.huami.com,app-analytics.huami.com",
-                "grant_type": "access_token",
-                "lang": "zh_CN",
-                "os_version": "1.5.0",
-                "source": "com.xiaomi.hm.health",
-                "third_name": third_name
-            }
-        else:  # 兜底
-            data2 = {
-                "app_name": "com.xiaomi.hm.health",
-                "country_code": "CN",
-                "code": code,
-                "device_id": "fuck1069-2002-7869-0129-757geoi6sam1",
-                "device_model": "android_phone",
-                "app_version": "6.12.0",
-                "grant_type": "access_token",
-                "allow_registration": "false",
-                "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
-                "source": "com.xiaomi.hm.health",
-                "third_name": third_name
-            }
+        data2 = {
+            "app_name": "com.xiaomi.hm.health",
+            "country_code": "CN",
+            "code": code,
+            "device_id": "fuck1069-2002-7869-0129-757geoi6sam1",
+            "device_model": "android_phone",
+            "app_version": "6.12.0",
+            "grant_type": "access_token",
+            "allow_registration": "false",
+            "dn": "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com",
+            "source": "com.xiaomi.hm.health",
+            "third_name": third_name
+        }
 
         try:
             r2 = requests.post(url2, data=data2, headers=headers, timeout=10)
