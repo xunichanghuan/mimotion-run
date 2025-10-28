@@ -109,9 +109,9 @@ class MiMotion():
       phone_with_86_pattern = r"^\+861\d{10}$"
 
       if re.fullmatch(email_pattern, user):
-          user, third_name = phone, "email"
+          user, third_name = user, "email"
       elif re.fullmatch(phone_with_86_pattern, user):
-          user, third_name = phone, "huami_phone"
+          user, third_name = user, "huami_phone"
       elif re.fullmatch(phone_pattern, user):
           user, third_name = f"+86{user}", "huami_phone"
       else:
