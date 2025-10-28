@@ -102,10 +102,27 @@ class MiMotion():
 
 
     def login(self, phone, password):
-        phone_pattern = r"(^(1)\d{10}$)"
-        if re.match(phone_pattern, phone):
+        # 正则定义
+        email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        phone_pattern = r"^1\d{10}$"
+        phone_with_86_pattern = r"^\+861\d{10}$"
+        
+        # 第一步：邮箱 → third_name = "huami"
+        if re.fullmatch(email_pattern, phone):
+            user = phone
+            third_name = "huami"
+        
+        # 第二步：已带+86的手机号 → third_name = "huami_phone"
+        elif re.fullmatch(phone_with_86_pattern, phone):
+            user = phone
+            third_name = "huami_phone"
+        
+        # 第三步：纯手机号（无+86）→ 补全+86，third_name = "huami_phone"
+        elif re.fullmatch(phone_pattern, phone):
             user = f"+86{phone}"
             third_name = "huami_phone"
+        
+        # 其他情况 → 保持原样，third_name = "huami"
         else:
             user = phone
             third_name = "huami"
@@ -209,6 +226,7 @@ class MiMotion():
             except Exception as e:
                 error_traceback = traceback.format_exc()
                 print(error_traceback)
+                return "操作失败：" + str(e)
 
 if __name__ == "__main__":
     try:
