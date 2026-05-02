@@ -14,7 +14,7 @@ class MiMotion():
         }
 
    #发送酷推
-    def push(self, title, content):
+    def push(self, title: str, content: str) -> None:
         try:
             url = "https://push.xuthus.cc/send/" + skey
             data = title + "\n" + content
@@ -27,7 +27,7 @@ class MiMotion():
             print(error_traceback)
 
     # 推送server
-    def push_wx(self,desp=""):
+    def push_wx(self,desp: str="") -> None:
         try:
             server_url = f"https://sc.ftqq.com/{sckey}.send"
             params = {
@@ -42,7 +42,7 @@ class MiMotion():
             print(error_traceback)
 
     # 推送telegram
-    def push_telegram(self,msg):
+    def push_telegram(self,msg) -> None:
         try:
             print("\nTelegram 推送开始")
             send_data = {"chat_id": tg_user_id, "text": title + '\n\n'+content, "disable_web_page_preview": "true"}
@@ -101,7 +101,7 @@ class MiMotion():
             print(error_traceback)
 
 
-    def login(self, user, password):
+    def login(self, user, password: str) -> tuple:
         # 正则定义
         email_pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         phone_pattern = r"^1\d{10}$"
