@@ -16,19 +16,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout codes
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Update system and install zsh
         run: |
           sudo -E apt-get -qq update
           sudo -E apt-get install zsh -y
           
       - name: 初始化Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
       - name: 开始
         env:
-          CONFIG: ${{secrets.CONFIG }}
+          CONFIG: ${{ secrets.CONFIG }}
         run: |
+          pip install --upgrade pip
           pip3 install requests
           python3 main.py
