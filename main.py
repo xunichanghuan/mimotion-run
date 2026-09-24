@@ -92,9 +92,10 @@ class MiMotion():
 
     def get_time(self):
         try:
-            url = "http://mshopact.vivo.com.cn/tool/config"
+            url = "http://www.beijing-time.org/time.asp"
             response = requests.get(url, headers=self.headers).json()
-            t = response["data"]["nowTime"]
+            t = response["data"]["t"]
+            #t = time.time()
             return t
         except Exception as e:
             error_traceback = traceback.format_exc()
